@@ -1,11 +1,12 @@
 import json
+import signal
 import socket
 import sys
 from types import SimpleNamespace
 
 import pytest
 
-from jevalkit.services import managed_services, ready, validate_services
+from jevalkit.services import managed_services, ready, stop_owned, validate_services
 
 
 def unused_local_url():
@@ -37,6 +38,26 @@ HTTPServer(('127.0.0.1', int(__import__('sys').argv[1])), H).serve_forever()
         assert metadata["hardware"] == "cpu"
         assert set(metadata["services"][0]["artifacts_sha256"][str(weights)]) == {"head.pt"}
     assert not ready(url)
+
+
+def test_stop_owned_tolerates_macos_permission_error_for_exiting_group(monkeypatch):
+    calls = []
+
+    class ExitedProcess:
+        pid = 12345
+
+        def poll(self):
+            return 0
+
+    def killpg(pid, signum):
+        calls.append((pid, signum))
+        if signum == 0:
+            raise PermissionError(1, "Operation not permitted")
+
+    monkeypatch.setattr("jevalkit.services.os.killpg", killpg)
+    stop_owned(ExitedProcess())
+
+    assert calls == [(12345, signal.SIGTERM), (12345, 0)]
 
 
 def test_failed_model_startup_is_not_mistaken_for_ready(tmp_path):

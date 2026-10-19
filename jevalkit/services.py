@@ -44,6 +44,9 @@ def ready(url):
 
 def stop_owned(process):
     # The leader can exit while its model workers remain in this owned group.
+    # macOS may report EPERM for an exited/zombie-only group during the
+    # existence probe, so treat it like a group that is already gone rather
+    # than failing cleanup in a finally block.
     try:
         os.killpg(process.pid, signal.SIGTERM)
     except ProcessLookupError:
@@ -53,7 +56,7 @@ def stop_owned(process):
         process.poll()  # Reap the leader before checking its remaining workers.
         try:
             os.killpg(process.pid, 0)
-        except ProcessLookupError:
+        except (ProcessLookupError, PermissionError):
             return
         if time.monotonic() >= deadline:
             try:
