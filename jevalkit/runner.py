@@ -12,6 +12,7 @@ from .datasets import DecisionDataset
 from .io import atomic_json, dumps, load_json, object_hash, sha256
 from .metrics import grouped_report, score_predictions
 from .schema import Unsupported, inference_request, is_capacity_error
+from .security import is_credential_key
 
 
 def selected_records(dataset, limit=None, rank=0, world_size=1):
@@ -77,6 +78,9 @@ def run(
 
     if warmup < 0:
         raise ValueError("warmup must be nonnegative")
+    options = model_options or {}
+    if any(is_credential_key(key) for key in options):
+        raise ValueError("Pass a token_env variable name, never a credential value")
     dataset = DecisionDataset(benchmark, root)
     output = Path(output)
     output.mkdir(parents=True, exist_ok=True)
@@ -88,7 +92,6 @@ def run(
         records = list(selected_records(dataset, limit, rank, world_size))
         if not records:
             raise ValueError("No requests selected for this shard")
-        options = model_options or {}
         # CLI accepts only token environment names; never token values.
         source_root = Path(__file__).parent
         signature = {

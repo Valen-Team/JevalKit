@@ -4,6 +4,8 @@ import importlib
 import os
 from dataclasses import asdict, dataclass, field
 
+from .security import is_credential_key
+
 
 @dataclass(frozen=True)
 class ModelSpec:
@@ -236,7 +238,7 @@ def build_model(name, root=None, **overrides):
                 f"{name} requires {endpoint_env} or --option endpoint=<full URL>. {spec.requirements}"
             )
         options["endpoint"] = endpoint
-    if any(k.lower() in {"token", "api_key", "password", "secret"} for k in options):
+    if any(is_credential_key(key) for key in options):
         raise ValueError("Pass a token_env variable name, never a credential value")
     module, cls = spec.adapter.split(":")
     return getattr(importlib.import_module(module), cls)(root=root, **options)

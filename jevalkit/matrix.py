@@ -6,6 +6,7 @@ from pathlib import Path
 from .config import MODELS
 from .datasets import BENCHMARKS
 from .io import atomic_json, dumps, load_json, object_hash
+from .security import is_credential_key
 
 
 def matrix_commands(config, root=None):
@@ -46,7 +47,7 @@ def matrix_commands(config, root=None):
         if root:
             command.extend(["--root", str(root)])
         for key, value in run.get("options", {}).items():
-            if key.lower() in {"token", "api_key", "password", "secret"}:
+            if is_credential_key(key):
                 raise ValueError("Matrix credentials must be supplied through token_env, never literal values")
             command.extend(["--option", key + "=" + dumps(value)])
         if run.get("limit") is not None:

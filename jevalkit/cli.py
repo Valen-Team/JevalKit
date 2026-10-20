@@ -6,6 +6,7 @@ from pathlib import Path
 from .config import MODELS, model_catalog
 from .datasets import BENCHMARKS, DecisionDataset
 from .io import dumps
+from .security import is_credential_key
 
 
 def options(items):
@@ -14,7 +15,7 @@ def options(items):
         if "=" not in item:
             raise ValueError("Options must be key=value")
         key, value = item.split("=", 1)
-        if key.lower() in {"token", "api_key", "password", "secret"}:
+        if is_credential_key(key):
             raise ValueError("Use token_env=VARIABLE_NAME instead of a credential value")
         try:
             value = json.loads(value)

@@ -11,6 +11,7 @@ from urllib.request import ProxyHandler, build_opener
 
 from .io import atomic_json
 from .models.provenance import inference_artifacts
+from .security import is_credential_key
 
 
 def validate_services(services):
@@ -28,8 +29,7 @@ def validate_services(services):
         env = service.get("env", {})
         if not isinstance(env, dict) or any(not isinstance(v, str) for v in env.values()):
             raise ValueError("Service environment must map names to strings")
-        if any(key.lower() in {"token", "api_key", "password", "secret"} or
-               key.lower().endswith(("_token", "_api_key", "_password", "_secret")) for key in env):
+        if any(is_credential_key(key) for key in env):
             raise ValueError("Service credentials must be inherited from the environment, never saved in matrix JSON")
 
 
