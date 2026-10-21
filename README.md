@@ -10,27 +10,27 @@
 </p>
 
 <p align="center">
-  <a href="https://huggingface.co/Valen-Team"><img src="https://img.shields.io/badge/Hugging_Face-Valen_Team-FFD21E?style=flat&amp;logo=huggingface&amp;logoColor=FFD21E&amp;labelColor=555555" alt="Hugging Face: Valen Team"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache_2.0-80A51B?style=flat&amp;labelColor=555555" alt="License: Apache 2.0"></a>
-  <a href="pyproject.toml"><img src="https://img.shields.io/badge/Python-3.10%2B-1683BB?style=flat&amp;logo=python&amp;logoColor=FFD43B&amp;labelColor=555555" alt="Python 3.10+"></a>
-  <br>
-  <a href="https://huggingface.co/spaces/Valen-Team/JevalKit-Leaderboard"><img src="https://img.shields.io/badge/Space-Leaderboard-009C83?style=flat&amp;logo=huggingface&amp;logoColor=FFD21E&amp;labelColor=555555" alt="Hugging Face Space: leaderboard"></a>
-  <a href="https://huggingface.co/datasets/Valen-Team/JevalKit_Datasets"><img src="https://img.shields.io/badge/Datasets-10_TSV_views-2185B5?style=flat&amp;logo=huggingface&amp;logoColor=FFD21E&amp;labelColor=555555" alt="Hugging Face: 10 dataset views"></a>
-  <a href="#supported-models"><img src="https://img.shields.io/badge/Models-20_families-8A63B8?style=flat&amp;labelColor=555555" alt="20 model families"></a>
-  <a href="#supported-benchmarks"><img src="https://img.shields.io/badge/Benchmarks-8_suites-E88B23?style=flat&amp;labelColor=555555" alt="8 Jev-related benchmark suites"></a>
+  <a href="#supported-models"><img src="https://img.shields.io/badge/Models-20_families-007F6B?style=flat&amp;labelColor=1E232C" alt="20 model families"></a>
+  <a href="#supported-benchmarks"><img src="https://img.shields.io/badge/Benchmarks-8_suites-007F6B?style=flat&amp;labelColor=1E232C" alt="8 Jev-related benchmark suites"></a>
+  <a href="https://huggingface.co/spaces/Valen-Team/JevalKit-Leaderboard"><img src="https://img.shields.io/badge/Space-Leaderboard-007F6B?style=flat&amp;logo=huggingface&amp;logoColor=white&amp;labelColor=1E232C" alt="Hugging Face Space: leaderboard"></a>
+  <a href="https://huggingface.co/datasets/Valen-Team/JevalKit_Datasets"><img src="https://img.shields.io/badge/Datasets-10_TSV_views-007F6B?style=flat&amp;logo=huggingface&amp;logoColor=white&amp;labelColor=1E232C" alt="Hugging Face: 10 dataset views"></a>
+  <a href="https://huggingface.co/Valen-Team"><img src="https://img.shields.io/badge/Hugging_Face-Valen_Team-007F6B?style=flat&amp;logo=huggingface&amp;logoColor=white&amp;labelColor=1E232C" alt="Hugging Face: Valen Team"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache_2.0-555555?style=flat&amp;labelColor=1E232C" alt="License: Apache 2.0"></a>
+  <a href="pyproject.toml"><img src="https://img.shields.io/badge/Python-3.10%2B-555555?style=flat&amp;logo=python&amp;logoColor=FFD43B&amp;labelColor=1E232C" alt="Python 3.10+"></a>
 </p>
 
 <p align="center">
-  <a href="#introduction">Introduction</a> · <a href="#latest-updates">News</a> · <a href="#quick-start">Quick Start</a> · <a href="#supported-models">Models</a> · <a href="#supported-benchmarks">Benchmarks</a> · <a href="#evaluation-results">Results</a> · <a href="#documentation">Docs</a>
+  <strong>English</strong> · <a href="README_zh-CN.md">简体中文</a><br>
+  <a href="https://valen-team.github.io/docs/jevalkit/">Documentation</a> · <a href="https://huggingface.co/spaces/Valen-Team/JevalKit-Leaderboard">Leaderboard</a> · <a href="https://huggingface.co/datasets/Valen-Team/JevalKit_Datasets">Datasets</a>
 </p>
 
 <p align="center">
-  <b>English</b> · <a href="README_zh-CN.md">简体中文</a>
+  <a href="#introduction">Introduction</a> · <a href="#latest-updates">News</a> · <a href="#quick-start">Quick start</a> · <a href="#supported-models">Models</a> · <a href="#supported-benchmarks">Benchmarks</a> · <a href="#evaluation-results">Results</a> · <a href="#documentation">Local guides</a>
 </p>
 
 <a id="introduction"></a>
 
-## ✨ Introduction
+## Introduction
 
 JevalKit is an open-source evaluation toolkit for Jev-like decision models,
 providing unified model interfaces and prepared evaluation datasets. Users can
@@ -41,21 +41,14 @@ in separate repositories.
 with the model or benchmark ID, and we can help add support for it.
 
 <a id="highlights"></a>
-
-## 🎯 Recent Codebase Changes
-
-- **2026-10-19:** Added a leaderboard and Markdown, TSV and JSON exports,
-  distinguishing complete evaluations, smoke tests and imported predictions.
-- **2026-10-18:** Added support for 20 model families and a shared evaluation
-  command across eight open-source, Jev-related benchmarks.
-
 <a id="latest-updates"></a>
 
-## 📰 News
+## News
 
 - **2026-10-19:** Released the [🤗 JevalKit Leaderboard](https://huggingface.co/spaces/Valen-Team/JevalKit-Leaderboard)
   with benchmark and model-size filters, model comparison, probability metrics
-  and evaluation result downloads.
+  and Markdown, TSV and JSON result exports. Complete evaluations, smoke tests
+  and imported predictions are distinguished.
 - **2026-10-18:** Integrated eight benchmarks: VisualDecisionBench, JevBench,
   Decision Index (public components), Typed-Decisions, DecisionBench, Procedural
   Typed Decisions, zh-decision-bench and JevAlt-Bench. Prepared evaluation datasets
@@ -66,7 +59,7 @@ with the model or benchmark ID, and we can help add support for it.
 
 <a id="quick-start"></a>
 
-## 🚀 Quick Start
+## Quick Start
 
 ### 1. Install
 
@@ -113,7 +106,7 @@ the same settings. [Full usage guide →](docs/quickstart.md)
 
 <a id="supported-models"></a>
 
-## 🤖 Supported Models
+## Supported Models
 
 Size variants and Clef/Clef-Flash count within their respective families.
 **Measured** means real inference has been verified for at least one registered
@@ -153,7 +146,7 @@ the [integration guide](docs/models.md).
 
 <a id="supported-benchmarks"></a>
 
-## 🧩 Supported Benchmarks
+## Supported Benchmarks
 
 <details>
 <summary>View supported datasets (8 benchmark suites)</summary>
@@ -182,7 +175,7 @@ models and benchmarks.
 
 <a id="evaluation-results"></a>
 
-## 📊 Evaluation Results
+## Evaluation Results
 
 <!-- jevalkit:results-summary:start -->
 The current snapshot contains **200 eligible full scores** and **285 retained
@@ -192,7 +185,9 @@ families remain pending. [🤗 Open the leaderboard](https://huggingface.co/spac
 
 <a id="documentation"></a>
 
-## 📖 Documentation
+## Documentation
+
+Read the [JevalKit documentation](https://valen-team.github.io/docs/jevalkit/) on the website, or use the repository guides below.
 
 | Guide | Contents |
 |---|---|
@@ -202,7 +197,7 @@ families remain pending. [🤗 Open the leaderboard](https://huggingface.co/spac
 
 <a id="contributing"></a>
 
-## 🤝 Contributing
+## Contributing
 
 Each model implementation has its own file in `jevalkit/models/`, registered in
 [`jevalkit/config.py`](jevalkit/config.py). Each benchmark has its own directory
@@ -234,7 +229,7 @@ Bug reports and contributions are welcome through
 
 <a id="license-and-acknowledgements"></a>
 
-## 📄 License and Acknowledgements
+## License and Acknowledgements
 
 JevalKit is released under [Apache-2.0](LICENSE).
 We thank [VLMEvalKit](https://github.com/open-compass/VLMEvalKit) for its evaluation
