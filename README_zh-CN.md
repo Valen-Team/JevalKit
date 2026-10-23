@@ -10,27 +10,27 @@
 </p>
 
 <p align="center">
-  <a href="https://huggingface.co/Valen-Team"><img src="https://img.shields.io/badge/Hugging_Face-Valen_Team-FFD21E?style=flat&amp;logo=huggingface&amp;logoColor=FFD21E&amp;labelColor=555555" alt="Hugging Face: Valen Team"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache_2.0-80A51B?style=flat&amp;labelColor=555555" alt="许可证：Apache 2.0"></a>
-  <a href="pyproject.toml"><img src="https://img.shields.io/badge/Python-3.10%2B-1683BB?style=flat&amp;logo=python&amp;logoColor=FFD43B&amp;labelColor=555555" alt="Python 3.10+"></a>
-  <br>
-  <a href="https://huggingface.co/spaces/Valen-Team/JevalKit-Leaderboard"><img src="https://img.shields.io/badge/Space-Leaderboard-009C83?style=flat&amp;logo=huggingface&amp;logoColor=FFD21E&amp;labelColor=555555" alt="Hugging Face 排行榜"></a>
-  <a href="https://huggingface.co/datasets/Valen-Team/JevalKit_Datasets"><img src="https://img.shields.io/badge/Datasets-10_TSV_views-2185B5?style=flat&amp;logo=huggingface&amp;logoColor=FFD21E&amp;labelColor=555555" alt="Hugging Face：10 个数据视图"></a>
-  <a href="#supported-models"><img src="https://img.shields.io/badge/Models-20_families-8A63B8?style=flat&amp;labelColor=555555" alt="20 个模型家族"></a>
-  <a href="#supported-benchmarks"><img src="https://img.shields.io/badge/Benchmarks-8_suites-E88B23?style=flat&amp;labelColor=555555" alt="8 个 Jev 相关评测基准"></a>
+  <a href="#supported-models"><img src="https://img.shields.io/badge/Models-20_families-007F6B?style=flat&amp;labelColor=1E232C" alt="20 个模型家族"></a>
+  <a href="#supported-benchmarks"><img src="https://img.shields.io/badge/Benchmarks-8_suites-007F6B?style=flat&amp;labelColor=1E232C" alt="8 个 Jev 相关评测基准"></a>
+  <a href="https://huggingface.co/spaces/Valen-Team/JevalKit-Leaderboard"><img src="https://img.shields.io/badge/Space-Leaderboard-007F6B?style=flat&amp;logo=huggingface&amp;logoColor=white&amp;labelColor=1E232C" alt="Hugging Face 排行榜"></a>
+  <a href="https://huggingface.co/datasets/Valen-Team/JevalKit_Datasets"><img src="https://img.shields.io/badge/Datasets-10_TSV_views-007F6B?style=flat&amp;logo=huggingface&amp;logoColor=white&amp;labelColor=1E232C" alt="Hugging Face：10 个数据视图"></a>
+  <a href="https://huggingface.co/Valen-Team"><img src="https://img.shields.io/badge/Hugging_Face-Valen_Team-007F6B?style=flat&amp;logo=huggingface&amp;logoColor=white&amp;labelColor=1E232C" alt="Hugging Face: Valen Team"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache_2.0-555555?style=flat&amp;labelColor=1E232C" alt="许可证：Apache 2.0"></a>
+  <a href="pyproject.toml"><img src="https://img.shields.io/badge/Python-3.10%2B-555555?style=flat&amp;logo=python&amp;logoColor=FFD43B&amp;labelColor=1E232C" alt="Python 3.10+"></a>
 </p>
 
 <p align="center">
-  <a href="#introduction">简介</a> · <a href="#latest-updates">更新</a> · <a href="#quick-start">快速开始</a> · <a href="#supported-models">模型</a> · <a href="#supported-benchmarks">基准</a> · <a href="#evaluation-results">结果</a> · <a href="#documentation">文档</a>
+  <a href="README.md">English</a> · <strong>简体中文</strong><br>
+  <a href="https://valen-team.github.io/zh-Hans/docs/jevalkit/">在线文档</a> · <a href="https://huggingface.co/spaces/Valen-Team/JevalKit-Leaderboard">排行榜</a> · <a href="https://huggingface.co/datasets/Valen-Team/JevalKit_Datasets">数据集</a>
 </p>
 
 <p align="center">
-  <a href="README.md">English</a> · <b>简体中文</b>
+  <a href="#introduction">简介</a> · <a href="#latest-updates">更新</a> · <a href="#quick-start">快速开始</a> · <a href="#supported-models">模型</a> · <a href="#supported-benchmarks">基准</a> · <a href="#evaluation-results">结果</a> · <a href="#documentation">本地文档</a>
 </p>
 
 <a id="introduction"></a>
 
-## ✨ 简介
+## 简介
 
 JevalKit 是面向 Jev 类决策模型的开源评测工具，提供统一的模型接口和已整理的评测数据。
 用户可通过一条命令在不同基准上评测模型，无需分别到多个仓库准备数据。
@@ -38,23 +38,17 @@ JevalKit 是面向 Jev 类决策模型的开源评测工具，提供统一的模
 **接入申请：** 如需支持新的模型或评测基准，只需[提交接入申请](https://github.com/Valen-Team/JevalKit/issues)并提供对应的模型或基准 ID，我们可以协助完成接入。
 
 <a id="highlights"></a>
-
-## 🎯 近期代码更新
-
-- **2026-10-19：** 提供排行榜及 Markdown、TSV、JSON 导出，区分完整评测、冒烟测试和导入的预测结果。
-- **2026-10-18：** 支持 20 个模型家族，可通过统一命令在 8 个 Jev 相关开源基准上运行评测。
-
 <a id="latest-updates"></a>
 
-## 📰 项目动态
+## 项目动态
 
-- **2026-10-19：** 发布 [🤗 JevalKit 排行榜](https://huggingface.co/spaces/Valen-Team/JevalKit-Leaderboard)，支持基准与模型大小筛选、模型比较、概率指标查看和评测结果下载。
+- **2026-10-19：** 发布 [🤗 JevalKit 排行榜](https://huggingface.co/spaces/Valen-Team/JevalKit-Leaderboard)，支持基准与模型大小筛选、模型比较、概率指标查看，以及 Markdown、TSV、JSON 结果导出；区分完整评测、冒烟测试和导入的预测结果。
 - **2026-10-18：** 接入 VisualDecisionBench、JevBench、Decision Index（公开部分）、Typed-Decisions、DecisionBench、Procedural Typed Decisions、zh-decision-bench 和 JevAlt-Bench，共 8 个基准。评测数据已整理至 [🤗 评测基准数据集汇总](https://huggingface.co/datasets/Valen-Team/JevalKit_Datasets)。
 - **2026-10-18：** 已接入 20 个 Jev 类模型家族，其中 18 个已完成真实推理验证；Jev 和 OpenAI Decisions 的托管 API 适配器已实现，实际评测尚待完成。
 
 <a id="quick-start"></a>
 
-## 🚀 快速开始
+## 快速开始
 
 ### 1. 安装
 
@@ -98,7 +92,7 @@ python -m jevalkit leaderboard "$JEVALKIT_DATA_ROOT/results" \
 
 <a id="supported-models"></a>
 
-## 🤖 支持的模型
+## 支持的模型
 
 同一家族的尺寸变体合并计数，Clef 和 Clef-Flash 也属于同一家族。
 “已实测”表示该家族至少有一个注册变体完成了真实推理验证；各基准的覆盖情况见[排行榜](https://huggingface.co/spaces/Valen-Team/JevalKit-Leaderboard)。
@@ -136,7 +130,7 @@ python -m jevalkit leaderboard "$JEVALKIT_DATA_ROOT/results" \
 
 <a id="supported-benchmarks"></a>
 
-## 🧩 支持的基准
+## 支持的基准
 
 <details>
 <summary>查看支持的数据集（8 个基准）</summary>
@@ -162,7 +156,7 @@ VisualDecisionBench 的图像和视频视图属于同一个基准。Decision Ind
 
 <a id="evaluation-results"></a>
 
-## 📊 评测结果
+## 评测结果
 
 <!-- jevalkit:results-summary:start -->
 当前快照包含 **200 条有效完整成绩**，保留 **285 份运行记录**，覆盖 **18 个已实测模型家族**。
@@ -171,7 +165,9 @@ VisualDecisionBench 的图像和视频视图属于同一个基准。Decision Ind
 
 <a id="documentation"></a>
 
-## 📖 文档
+## 文档
+
+在线阅读[官网 JevalKit 文档](https://valen-team.github.io/zh-Hans/docs/jevalkit/)，或使用下列仓库内指南。
 
 | 文档 | 内容 |
 |---|---|
@@ -181,7 +177,7 @@ VisualDecisionBench 的图像和视频视图属于同一个基准。Decision Ind
 
 <a id="contributing"></a>
 
-## 🤝 参与贡献
+## 参与贡献
 
 每个模型实现在 `jevalkit/models/` 中有独立文件，通过 [jevalkit/config.py](jevalkit/config.py) 注册。
 每个基准在 `jevalkit/datasets/` 中有独立目录，保存数据准备、评分和 TSV 元信息。
@@ -211,7 +207,7 @@ VisualDecisionBench 的图像和视频视图属于同一个基准。Decision Ind
 
 <a id="license-and-acknowledgements"></a>
 
-## 📄 许可与致谢
+## 许可与致谢
 
 JevalKit 采用 [Apache-2.0](LICENSE) 许可。感谢 [VLMEvalKit](https://github.com/open-compass/VLMEvalKit)
 提供的评测工具设计参考，以及各决策模型和基准的作者。
