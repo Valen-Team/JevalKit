@@ -68,6 +68,9 @@ Set KEV_ENDPOINT, H2O_ENDPOINT or OPENJEV_ENDPOINT to a complete `/v1/systemone`
 Jev uses JEV_ENDPOINT and TYPESAFE_API_KEY (or `--option token_env=JEV_API_KEY`).
 The registered release is `jev-1.14.0`; each response is checked against that version.
 Images use native TypeSafe assets with the required image header.
+Install `jevalkit[api]` and set `--option prepare_images=true` to apply the author's
+image preparation: upright PNGs, aspect-preserving resizing to 280–1568 pixels per side,
+without cropping or padding. Unsupported aspect ratios remain explicit.
 `--option long_context=true` enables the author's 262k context mode; both feature flags are recorded.
 OpenAI uses OPENAI_API_KEY.
 Tokens are read from environment variables and never included in result manifests.

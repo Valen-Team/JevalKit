@@ -62,6 +62,8 @@ Kev、H2O-Lightning 和 OpenJev 使用作者发布的 Jev 兼容服务协议。
 Jev 使用 JEV_ENDPOINT 和 TYPESAFE_API_KEY，也可通过 `--option token_env=JEV_API_KEY` 指定密钥环境变量。
 当前注册版本为 `jev-1.14.0`，每次响应都会核验实际版本。
 图像通过 TypeSafe 原生 assets 字段及必需的图像请求头传输。
+安装 `jevalkit[api]` 后，可用 `--option prepare_images=true` 按作者要求校正图像方向，
+保持宽高比缩放至每边 280–1568 像素，并以 PNG 传输。图像不裁剪、不补边，无法满足尺寸限制的宽高比会明确报为不支持。
 `--option long_context=true` 可启用作者提供的 262k 上下文模式，两项功能开关均记入运行记录。
 OpenAI 使用 OPENAI_API_KEY。
 凭据从环境变量读取，不写入结果 manifest。

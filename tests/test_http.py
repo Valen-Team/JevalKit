@@ -159,6 +159,45 @@ def test_jev_assets_preserve_image_bytes_and_evidence_order(tmp_path, decision_s
     assert source == before
 
 
+def test_jev_reference_image_preparation_preserves_the_whole_image(decision_server):
+    import base64
+    from io import BytesIO
+    Image = pytest.importorskip("PIL.Image")
+
+    endpoint, calls = decision_server
+    image = Image.new("RGB", (256, 512), "red")
+    image.paste("blue", (128, 0, 256, 512))
+    buffer = BytesIO()
+    image.save(buffer, format="PNG")
+    source = request({"messages": [{"role": "user", "content": [
+        {"type": "image_url", "image_url": {"url": "data:image/png;base64," + base64.b64encode(buffer.getvalue()).decode()}},
+    ]}]})
+    before = copy.deepcopy(source)
+    model = build_model("Jev", endpoint=endpoint + "/v1/systemone", prepare_images=True)
+    model.predict(source)
+    asset = next(iter(calls[0][2]["assets"].values()))
+    with Image.open(BytesIO(base64.b64decode(asset["data_base64"]))) as prepared:
+        assert prepared.size == (280, 560)
+        assert prepared.getpixel((0, 0)) == (255, 0, 0)
+        assert prepared.getpixel((279, 559)) == (0, 0, 255)
+    assert model.metadata()["image_preparation"] == "typesafe-reference-no-crop"
+    assert source == before
+
+
+def test_jev_image_preparation_rejects_an_infeasible_aspect_ratio(decision_server):
+    from io import BytesIO
+    Image = pytest.importorskip("PIL.Image")
+
+    endpoint, calls = decision_server
+    image = Image.new("RGB", (10, 2000))
+    buffer = BytesIO()
+    image.save(buffer, format="PNG")
+    model = build_model("Jev", endpoint=endpoint + "/v1/systemone", prepare_images=True)
+    with pytest.raises(Unsupported, match="without cropping or padding"):
+        model.prepare_image(buffer.getvalue())
+    assert calls == []
+
+
 @pytest.mark.parametrize("kind,url,options,reason", [
     ("video_url", "clip.mp4", {}, "native video"),
     ("image_url", "picture.png", {"images": False}, "images=true"),

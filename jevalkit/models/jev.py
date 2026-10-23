@@ -2,6 +2,7 @@
 
 import base64
 import copy
+from io import BytesIO
 import uuid
 
 from ._http import HttpDecisionModel, media_data_url
@@ -11,12 +12,33 @@ from ..schema import Unsupported, is_message_state
 class JevModel(HttpDecisionModel):
     retryable_statuses = HttpDecisionModel.retryable_statuses | {529}
 
-    def __init__(self, *, images=True, long_context=False, expected_response_model=None, **options):
+    def __init__(self, *, images=True, long_context=False, prepare_images=False,
+                 expected_response_model=None, **options):
         super().__init__(**options)
-        if type(images) is not bool or type(long_context) is not bool:
-            raise ValueError("Jev images and long_context options must be booleans")
+        if any(type(value) is not bool for value in (images, long_context, prepare_images)):
+            raise ValueError("Jev images, long_context and prepare_images options must be booleans")
         self.images, self.long_context = images, long_context
+        self.prepare_images = prepare_images
         self.expected_response_model = expected_response_model or self.model
+
+    def prepare_image(self, data):
+        from PIL import Image, ImageOps
+
+        with Image.open(BytesIO(data)) as original:
+            if getattr(original, "is_animated", False):
+                raise Unsupported("Jev accepts still images only")
+            image = ImageOps.exif_transpose(original)
+            width, height = image.size
+            scale = min(1568 / max(width, height), max(1.0, 280 / min(width, height)))
+            size = (round(width * scale), round(height * scale))
+            if min(size) < 280 or max(size) > 1568:
+                raise Unsupported("Jev image aspect ratio cannot meet its size limits without cropping or padding")
+            image = image.convert("RGBA" if "A" in image.getbands() or "transparency" in image.info else "RGB")
+            if image.size != size:
+                image = image.resize(size, Image.Resampling.BICUBIC)
+            output = BytesIO()
+            image.save(output, format="PNG")
+            return output.getvalue()
 
     def request_headers(self):
         headers = super().request_headers()
@@ -61,6 +83,8 @@ class JevModel(HttpDecisionModel):
                             image_format = "jpeg"
                         else:
                             raise Unsupported("Jev assets support PNG and JPEG images; bytes were not converted")
+                        if self.prepare_images:
+                            data, image_format = self.prepare_image(data), "png"
                         placeholder = str(uuid.uuid4())
                         assets[placeholder] = {"type": "image", "format": image_format,
                                                "data_base64": base64.b64encode(data).decode("ascii")}
@@ -86,4 +110,5 @@ class JevModel(HttpDecisionModel):
                 "expected_response_model": self.expected_response_model,
                 "image_transport": "typesafe-assets-v1", "images": self.images,
                 "long_context": self.long_context, "max_score_levels": 10, "max_choices": 255,
+                "image_preparation": "typesafe-reference-no-crop" if self.prepare_images else "none",
                 "hardware": "TypeSafe hosted API (undisclosed)"}

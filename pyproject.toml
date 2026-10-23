@@ -12,6 +12,7 @@ license = {text = "Apache-2.0"}
 dependencies = []
 
 [project.optional-dependencies]
+api = ["pillow>=10"]
 hf = ["torch>=2.6", "torchvision>=0.21", "transformers>=5.4", "huggingface-hub>=0.26", "pillow", "av>=16.1", "safetensors", "accelerate"]
 data = ["huggingface-hub>=0.26", "datasets>=3", "pyarrow>=18"]
 decision-index = ["decision-index @ git+https://github.com/apolinario/decision-index.git@f5a6e4fd85fed05e77878dfc4966d0568bfb45ec"]
