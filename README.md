@@ -135,7 +135,7 @@ variant; per-benchmark coverage is shown in the [leaderboard](https://huggingfac
 | [Kev](https://github.com/jaredpalmer/kev) | `Kev` | Author server | Measured |
 | [H2O-Lightning](https://huggingface.co/h2oai/h2o-lightning-4b) | `H2O-Lightning` | Author server | Measured |
 | [OpenJev](https://huggingface.co/openjev/openjev) | `OpenJev` | Author server | Measured |
-| [Jev](https://typesafe.ai) | `Jev` | Hosted API | Live evaluation pending |
+| [Jev](https://typesafe.ai) | `Jev` | Hosted API | Evaluation in progress |
 | [OpenAI Decisions](https://developers.openai.com/api/docs/guides/decisions) | `OpenAI-Decisions` | Hosted API | Live evaluation pending |
 
 </details>
@@ -178,9 +178,9 @@ models and benchmarks.
 ## Evaluation Results
 
 <!-- jevalkit:results-summary:start -->
-The current snapshot contains **200 eligible full scores** and **285 retained
-run artifacts**. It covers **18 measured model families**; the two hosted API
-families remain pending. [🤗 Open the leaderboard](https://huggingface.co/spaces/Valen-Team/JevalKit-Leaderboard).
+The current snapshot contains **205 eligible full scores** and **291 retained
+run artifacts**. It covers **19 measured model families**; OpenAI-Decisions
+remains pending. [🤗 Open the leaderboard](https://huggingface.co/spaces/Valen-Team/JevalKit-Leaderboard).
 <!-- jevalkit:results-summary:end -->
 
 <a id="documentation"></a>

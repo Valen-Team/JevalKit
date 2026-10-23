@@ -120,7 +120,7 @@ python -m jevalkit leaderboard "$JEVALKIT_DATA_ROOT/results" \
 | [Kev](https://github.com/jaredpalmer/kev) | `Kev` | 作者服务 | 已实测 |
 | [H2O-Lightning](https://huggingface.co/h2oai/h2o-lightning-4b) | `H2O-Lightning` | 作者服务 | 已实测 |
 | [OpenJev](https://huggingface.co/openjev/openjev) | `OpenJev` | 作者服务 | 已实测 |
-| [Jev](https://typesafe.ai) | `Jev` | 托管 API | 待实际评测 |
+| [Jev](https://typesafe.ai) | `Jev` | 托管 API | 评测进行中 |
 | [OpenAI Decisions](https://developers.openai.com/api/docs/guides/decisions) | `OpenAI-Decisions` | 托管 API | 待实际评测 |
 
 </details>
@@ -159,8 +159,8 @@ VisualDecisionBench 的图像和视频视图属于同一个基准。Decision Ind
 ## 评测结果
 
 <!-- jevalkit:results-summary:start -->
-当前快照包含 **200 条有效完整成绩**，保留 **285 份运行记录**，覆盖 **18 个已实测模型家族**。
-两个托管 API 家族仍待实际评测。[🤗 打开排行榜](https://huggingface.co/spaces/Valen-Team/JevalKit-Leaderboard)。
+当前快照包含 **205 条有效完整成绩**，保留 **291 份运行记录**，覆盖 **19 个已实测模型家族**。
+OpenAI-Decisions 仍待实际评测。[🤗 打开排行榜](https://huggingface.co/spaces/Valen-Team/JevalKit-Leaderboard)。
 <!-- jevalkit:results-summary:end -->
 
 <a id="documentation"></a>
