@@ -45,6 +45,9 @@ candidate coverage. Generic metrics allow at most 0.01 rounding error in the
 sum, recording the raw answer and normalizing only for generic metrics. The
 official JevBench scorer retains its own published strict/rounded tolerances and
 lexical argmax tie rule. Its official aggregates are retained separately.
+The Decision Index integration also guards against floating-point noise at its
+validator's 0.01 boundary. A temporary copy is used only for that check; original
+answers are passed to the pinned official scorer, and the compatibility count is recorded.
 
 NLL floors probabilities at 1e-12; multiclass Brier is the sum of squared errors;
 ECE uses 15 equal-width confidence bins; ordinal RPS averages squared cumulative

@@ -260,3 +260,54 @@ def test_prepared_soft_reference_runs_and_rescores_without_gold_inference(tmp_pa
     rescored = score_saved_run(tmp_path / "run", root=tmp_path / "data")
     assert rescored["official"] == report["official"]
     assert DecisionDataset("TypedDecisions", tmp_path / "data").verify()["records"] == 1
+
+
+@pytest.mark.parametrize("probabilities", [{"a": 0.5, "b": 0.49}, {"a": 0.51, "b": 0.5}])
+def test_official_index_rounding_boundary_keeps_raw_probabilities(probabilities):
+    import copy
+    pytest.importorskip("decision_index")
+    from jevalkit.datasets.decision_index import validate_official_response
+
+    questions = {"q": {"type": "choice", "instructions": "Choose", "criteria": {"a": "A", "b": "B"}}}
+    response = {"model": "fixture", "answers": {"q": {"type": "choice", "choice": "a", "probabilities": probabilities}}}
+    before = copy.deepcopy(response)
+    assert validate_official_response(questions, response)
+    assert response == before
+
+
+@pytest.mark.parametrize("answer", [
+    {"type": "choice", "choice": "a", "probabilities": {"a": 0.5, "b": 0.48}},
+    {"type": "choice", "choice": "missing", "probabilities": {"a": 0.5, "b": 0.49}},
+    {"type": "choice", "choice": "a", "probabilities": {"a": 0.99}},
+    {"type": "choice", "choice": "a", "probabilities": {"a": float("nan"), "b": 0.5}},
+    {"type": "noul", "noul": 0.5},
+])
+def test_official_index_boundary_compatibility_rejects_real_invalid_answers(answer):
+    pytest.importorskip("decision_index")
+    from jevalkit.datasets.decision_index import validate_official_response
+
+    questions = {"q": {"type": "choice", "instructions": "Choose", "criteria": {"a": "A", "b": "B"}}}
+    with pytest.raises((ValueError, KeyError, TypeError)):
+        validate_official_response(questions, {"answers": {"q": answer}})
+
+
+def test_official_scorer_receives_original_answers_after_boundary_validation(tmp_path, monkeypatch):
+    import copy
+    from types import SimpleNamespace
+    pytest.importorskip("decision_index")
+    from jevalkit.datasets.decision_index import evaluate
+
+    monkeypatch.setattr("decision_index.suite.io.Suite", lambda *args: object())
+    captured = []
+    def score(suite, path, *args):
+        captured.extend(json.loads(line) for line in path.read_text().splitlines())
+        return {"complete": True}
+    monkeypatch.setattr("decision_index.pipeline.score_run", score)
+    dataset = SimpleNamespace(path=tmp_path/"data.tsv", manifest={"suite_dir": "suite", "source": {"edition": "0.3"}})
+    response = {"model": "fixture", "answers": {"q": {"type": "choice", "choice": "a", "probabilities": {"a": 0.5, "b": 0.49}}}}
+    before = copy.deepcopy(response)
+    record = {"index": "fixture", "request": {"questions": {"q": {"type": "choice", "criteria": {"a": "A", "b": "B"}}}},
+              "meta": {"_evaluation": {"run_id": "fixture"}}}
+    report = evaluate(dataset, [record], [{"index": "fixture", "status": "ok", "latency_s": 0.1, "response": response}], tmp_path)
+    assert captured[0]["response"] == before and captured[0]["status"] == "ok"
+    assert response == before and report["rounding_boundary_validation_checks"] == 1
