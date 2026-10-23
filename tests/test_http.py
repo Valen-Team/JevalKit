@@ -182,6 +182,20 @@ def test_jev_rejects_another_response_model(decision_server, monkeypatch):
     assert calls == []
 
 
+@pytest.mark.parametrize("question,reason", [
+    ({"type": "score", "instructions": "Rate", "criteria": [str(i) for i in range(11)]}, "10 score levels"),
+    ({"type": "choice", "instructions": "Choose", "criteria": {str(i): str(i) for i in range(256)}}, "255 choice candidates"),
+])
+def test_jev_published_capacity_preserves_all_candidates(decision_server, question, reason):
+    endpoint, calls = decision_server
+    model = build_model("Jev", endpoint=endpoint + "/v1/systemone")
+    source = {"state": "Evidence", "questions": {"check": question}}
+    before = copy.deepcopy(source)
+    with pytest.raises(Unsupported, match=reason):
+        model.predict(source)
+    assert calls == [] and source == before
+
+
 def test_jev_retries_native_overload_status(decision_server, monkeypatch):
     endpoint, calls = decision_server
     monkeypatch.setattr("jevalkit.models._http.time.sleep", lambda seconds: None)

@@ -28,6 +28,11 @@ class JevModel(HttpDecisionModel):
 
     def build_payload(self, request, *, media_root=None):
         state, questions = copy.deepcopy(request["state"]), copy.deepcopy(request["questions"])
+        for question in questions.values():
+            if question["type"] == "score" and len(question["criteria"]) > 10:
+                raise Unsupported("Jev supports at most 10 score levels; all levels were retained")
+            if question["type"] == "choice" and len(question["criteria"]) > 255:
+                raise Unsupported("Jev supports at most 255 choice candidates; all candidates were retained")
         assets = {}
         if is_message_state(state):
             for message in state["messages"]:
@@ -80,4 +85,5 @@ class JevModel(HttpDecisionModel):
         return {**super().metadata(), "media_format": "assets",
                 "expected_response_model": self.expected_response_model,
                 "image_transport": "typesafe-assets-v1", "images": self.images,
-                "long_context": self.long_context, "hardware": "TypeSafe hosted API (undisclosed)"}
+                "long_context": self.long_context, "max_score_levels": 10, "max_choices": 255,
+                "hardware": "TypeSafe hosted API (undisclosed)"}
