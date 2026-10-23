@@ -182,6 +182,22 @@ def test_reject_invalid_distributions(p):
         distribution(p, ["a", "b"])
 
 
+@pytest.mark.parametrize("p", [{"a": 0.32, "b": 0.05, "c": 0.55, "d": 0.07},
+                              {"a": 0.51, "b": 0.5}])
+def test_probability_rounding_tolerance_includes_its_decimal_boundary(p):
+    before = dict(p)
+    normalized = distribution(p, list(p))
+    assert sum(normalized.values()) == pytest.approx(1)
+    assert p == before
+
+
+@pytest.mark.parametrize("p", [{"a": 0.49, "b": 0.4999999},
+                              {"a": 0.51, "b": 0.5000001}])
+def test_probability_rounding_outside_the_tolerance_remains_invalid(p):
+    with pytest.raises(ValueError, match="sum"):
+        distribution(p, list(p))
+
+
 def test_soft_targets_and_failed_denominator():
     source = record()
     q = source["request"]["questions"]["severity"]

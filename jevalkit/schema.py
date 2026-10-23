@@ -42,7 +42,9 @@ def distribution(value, keys, tolerance=0.01):
            or not 0 <= v <= 1 for v in value.values()):
         raise ValueError("Probabilities must be finite numbers in [0,1]")
     total = sum(value.values())
-    if total <= 0 or abs(total - 1) > tolerance:
+    difference = abs(total - 1)
+    at_boundary = math.isclose(difference, tolerance, rel_tol=0, abs_tol=8 * math.ulp(1.0))
+    if total <= 0 or difference > tolerance and not at_boundary:
         raise ValueError(f"Probabilities sum to {total}, not 1")
     return {key: value[key] / total for key in keys}
 
