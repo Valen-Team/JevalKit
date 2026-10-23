@@ -30,8 +30,8 @@ def decision_server(monkeypatch):
                     json.loads(self.rfile.read(int(self.headers["Content-Length"]))),
                 )
             )
-            if self.path == "/retry" and len(calls) == 1:
-                self.send_response(429)
+            if self.path in {"/retry", "/jev-retry"} and len(calls) == 1:
+                self.send_response(529 if self.path == "/jev-retry" else 429)
                 self.send_header("Retry-After", "0")
                 self.end_headers()
                 return
@@ -46,6 +46,8 @@ def decision_server(monkeypatch):
             self.send_header("Content-Type", "application/json")
             self.end_headers()
             response = {"answers": {"check": {"type": "noul", "noul": 0.75}}}
+            if calls[-1][2].get("model", "").startswith("jev-"):
+                response["model"] = calls[-1][2]["model"]
             if calls[-1][2].get("model", "").startswith("startlux-models/"):
                 response["model"] = calls[-1][2]["model"].split("/")[-1]
             if self.path == "/v1/decisions":
@@ -109,6 +111,83 @@ def test_registered_systemone_api_uses_named_questions(decision_server, model_na
     assert model.predict(source)["answers"]["check"]["type"] == "noul"
     assert calls[0][0] == "/v1/systemone" and calls[0][2]["questions"] == source["questions"]
     assert source == before
+
+
+def test_jev_preserves_json_and_uses_native_asset_headers(decision_server, monkeypatch):
+    endpoint, calls = decision_server
+    monkeypatch.setenv("JEVAL_TEST_JEV_TOKEN", "fixture-jev-token")
+    model = build_model("Jev", endpoint=endpoint + "/v1/systemone",
+                        token_env="JEVAL_TEST_JEV_TOKEN", long_context=True)
+    source = request({"item": {"color": "red", "quantity": 2}})
+    before = copy.deepcopy(source)
+    assert model.predict(source)["model"] == "jev-1.14.0"
+    _, headers, sent = calls[0]
+    assert sent["state"] == source["state"] and sent["questions"] == source["questions"]
+    assert headers["Authorization"] == "Bearer fixture-jev-token"
+    normalized_headers = {key.lower(): value for key, value in headers.items()}
+    assert normalized_headers["typesafe-danger-zone-images"] == "true"
+    assert normalized_headers["typesafe-danger-zone-long-context"] == "true"
+    assert "fixture-jev-token" not in json.dumps(model.metadata())
+    assert model.metadata()["media_format"] == "assets"
+    assert source == before
+
+
+def test_jev_assets_preserve_image_bytes_and_evidence_order(tmp_path, decision_server):
+    import base64
+
+    endpoint, calls = decision_server
+    data = base64.b64decode("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aXZkAAAAASUVORK5CYII=")
+    (tmp_path / "picture.png").write_bytes(data)
+    source = request({"messages": [{"role": "user", "content": [
+        {"type": "text", "text": "Before"},
+        {"type": "image_url", "image_url": {"url": "picture.png"}},
+        {"type": "text", "text": "Between"},
+        {"type": "image_url", "image_url": {"url": "data:image/png;base64," + base64.b64encode(data).decode()}},
+        {"type": "text", "text": "After"},
+    ]}]})
+    before = copy.deepcopy(source)
+    model = build_model("Jev", endpoint=endpoint + "/v1/systemone")
+    model.predict(source, media_root=tmp_path)
+    sent = calls[0][2]
+    content = sent["state"]["messages"][0]["content"]
+    assert content[::2] == ["Before", "Between", "After"]
+    assert content[1] != content[3] and set(sent["assets"]) == {content[1], content[3]}
+    for asset in sent["assets"].values():
+        assert asset["type"] == "image" and asset["format"] == "png"
+        assert base64.b64decode(asset["data_base64"]) == data
+    assert "typesafe-danger-zone-long-context" not in {key.lower() for key in calls[0][1]}
+    assert source == before
+
+
+@pytest.mark.parametrize("kind,url,options,reason", [
+    ("video_url", "clip.mp4", {}, "native video"),
+    ("image_url", "picture.png", {"images": False}, "images=true"),
+    ("image_url", "https://example.invalid/picture.png", {}, "Materialize"),
+])
+def test_jev_unsupported_evidence_is_rejected_before_http(decision_server, kind, url, options, reason):
+    endpoint, calls = decision_server
+    model = build_model("Jev", endpoint=endpoint + "/v1/systemone", **options)
+    source = request({"messages": [{"role": "user", "content": [{"type": kind, kind: {"url": url}}]}]})
+    with pytest.raises(Unsupported, match=reason):
+        model.predict(source)
+    assert calls == []
+
+
+def test_jev_rejects_another_response_model(decision_server, monkeypatch):
+    endpoint, calls = decision_server
+    model = build_model("Jev", endpoint=endpoint + "/v1/systemone")
+    monkeypatch.setattr(model, "post", lambda payload: {"model": "jev-1.13.0", "answers": {}})
+    with pytest.raises(ValueError, match="expected_response_model"):
+        model.predict(request())
+    assert calls == []
+
+
+def test_jev_retries_native_overload_status(decision_server, monkeypatch):
+    endpoint, calls = decision_server
+    monkeypatch.setattr("jevalkit.models._http.time.sleep", lambda seconds: None)
+    model = build_model("Jev", endpoint=endpoint + "/jev-retry", retries=1)
+    assert model.predict(request())["model"] == "jev-1.14.0"
+    assert len(calls) == 2
 
 
 def startlux_rejection(message, location=None):

@@ -169,7 +169,7 @@ register(
     "Jev",
     "Jev",
     "jevalkit.models.jev:JevModel",
-    "jev-1.13.0",
+    "jev-1.14.0",
     "https://typesafe.ai",
     options={"endpoint_env": "JEV_ENDPOINT", "token_env": "TYPESAFE_API_KEY"},
     transport="http",

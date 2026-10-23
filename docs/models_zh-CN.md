@@ -59,7 +59,11 @@ OmniJev 额外的弃答概率保留在 `native_answers` 中。验证完整原生
 
 Kev、H2O-Lightning 和 OpenJev 使用作者发布的 Jev 兼容服务协议。
 将 KEV_ENDPOINT、H2O_ENDPOINT 或 OPENJEV_ENDPOINT 设置为完整的 `/v1/systemone` 地址。
-Jev 使用 JEV_ENDPOINT 和 TYPESAFE_API_KEY；OpenAI 使用 OPENAI_API_KEY。
+Jev 使用 JEV_ENDPOINT 和 TYPESAFE_API_KEY，也可通过 `--option token_env=JEV_API_KEY` 指定密钥环境变量。
+当前注册版本为 `jev-1.14.0`，每次响应都会核验实际版本。
+图像通过 TypeSafe 原生 assets 字段及必需的图像请求头传输。
+`--option long_context=true` 可启用作者提供的 262k 上下文模式，两项功能开关均记入运行记录。
+OpenAI 使用 OPENAI_API_KEY。
 凭据从环境变量读取，不写入结果 manifest。
 配置后可用 `python -m jevalkit matrix examples/hosted-apis.json` 运行[托管 API 矩阵](../examples/hosted-apis.json)，
 对两个服务执行完整 JevBench。配置文件不保存凭据，实际 API 评测需提供各服务的访问凭据。

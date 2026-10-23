@@ -65,7 +65,11 @@ abstained answer is recorded as a refusal. This policy is recorded in run metada
 
 Kev, H2O-Lightning and OpenJev use their published Jev-compatible server contracts.
 Set KEV_ENDPOINT, H2O_ENDPOINT or OPENJEV_ENDPOINT to a complete `/v1/systemone` URL.
-Jev uses JEV_ENDPOINT and TYPESAFE_API_KEY. OpenAI uses OPENAI_API_KEY.
+Jev uses JEV_ENDPOINT and TYPESAFE_API_KEY (or `--option token_env=JEV_API_KEY`).
+The registered release is `jev-1.14.0`; each response is checked against that version.
+Images use native TypeSafe assets with the required image header.
+`--option long_context=true` enables the author's 262k context mode; both feature flags are recorded.
+OpenAI uses OPENAI_API_KEY.
 Tokens are read from environment variables and never included in result manifests.
 Once these variables are configured, the [hosted API matrix](../examples/hosted-apis.json)
 runs full JevBench for both services with `python -m jevalkit matrix examples/hosted-apis.json`.

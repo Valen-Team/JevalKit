@@ -56,6 +56,7 @@ def api_state(state, root, openai=False):
 
 class HttpDecisionModel(DecisionModel):
     modalities = frozenset({"text", "image"})
+    retryable_statuses = frozenset({429, 500, 502, 503, 504})
 
     def __init__(
         self,
@@ -81,11 +82,15 @@ class HttpDecisionModel(DecisionModel):
         """Return a safe capacity reason for a known server contract, if any."""
         return None
 
-    def post(self, payload):
+    def request_headers(self):
         headers = {"Content-Type": "application/json"}
         token = os.environ.get(self.token_env)
         if token:
             headers["Authorization"] = "Bearer " + token
+        return headers
+
+    def post(self, payload):
+        headers = self.request_headers()
         for attempt in range(self.retries + 1):
             try:
                 req = Request(self.endpoint, data=dumps(payload).encode(), headers=headers, method="POST")
@@ -96,7 +101,7 @@ class HttpDecisionModel(DecisionModel):
                 if reason is not None:
                     raise Unsupported(reason) from None
                 # Never persist response text that may echo authorization or input data.
-                if exc.code not in {429, 500, 502, 503, 504} or attempt == self.retries:
+                if exc.code not in self.retryable_statuses or attempt == self.retries:
                     raise RuntimeError(f"Decision API HTTP {exc.code}") from None
                 retry_after = exc.headers.get("Retry-After", "")
                 delay = min(float(retry_after), 30) if retry_after.isdigit() else min(2**attempt, 30)
