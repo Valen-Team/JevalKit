@@ -30,6 +30,9 @@ def decision_server(monkeypatch):
                     json.loads(self.rfile.read(int(self.headers["Content-Length"]))),
                 )
             )
+            if self.path == "/always-disconnect" or (self.path == "/disconnect" and len(calls) == 1):
+                self.close_connection = True
+                return
             if self.path in {"/retry", "/jev-retry"} and len(calls) == 1:
                 self.send_response(529 if self.path == "/jev-retry" else 429)
                 self.send_header("Retry-After", "0")
@@ -99,6 +102,22 @@ def test_transport_retries_and_reads_token_without_persisting_it(decision_server
     assert len(calls) == 2 and calls[1][1]["Authorization"] == "Bearer test-credential"
     assert answer_probabilities(request()["questions"]["check"], result["answers"]["check"])["true"] == 0.75
     assert "test-credential" not in json.dumps(model.metadata())
+
+
+@pytest.mark.parametrize("always_disconnect", [False, True])
+def test_transport_retries_remote_disconnect_with_a_fixed_limit(decision_server, monkeypatch, always_disconnect):
+    endpoint, calls = decision_server
+    delays = []
+    monkeypatch.setattr("jevalkit.models._http.time.sleep", delays.append)
+    path = "/always-disconnect" if always_disconnect else "/disconnect"
+    model = HttpDecisionModel(endpoint + path, "fixture", retries=1)
+    if always_disconnect:
+        with pytest.raises(RuntimeError, match="^Decision API connection failed after retries$"):
+            model.predict(request())
+    else:
+        result = model.predict(request())
+        assert result["answers"]["check"]["noul"] == 0.75
+    assert len(calls) == 2 and delays == [1]
 
 
 @pytest.mark.parametrize("model_name", ["Jev", "Kev", "H2O-Lightning", "OpenJev",

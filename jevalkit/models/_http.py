@@ -7,6 +7,7 @@ import mimetypes
 import os
 import time
 from pathlib import Path
+from http.client import RemoteDisconnected
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
@@ -105,7 +106,7 @@ class HttpDecisionModel(DecisionModel):
                     raise RuntimeError(f"Decision API HTTP {exc.code}") from None
                 retry_after = exc.headers.get("Retry-After", "")
                 delay = min(float(retry_after), 30) if retry_after.isdigit() else min(2**attempt, 30)
-            except (URLError, TimeoutError):
+            except (URLError, TimeoutError, RemoteDisconnected):
                 if attempt == self.retries:
                     raise RuntimeError("Decision API connection failed after retries") from None
                 delay = min(2**attempt, 30)
