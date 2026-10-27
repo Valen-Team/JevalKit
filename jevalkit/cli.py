@@ -2,6 +2,7 @@
 
 import argparse
 import json
+import sys
 from pathlib import Path
 from .config import MODELS, model_catalog
 from .datasets import BENCHMARKS, DecisionDataset
@@ -26,6 +27,13 @@ def options(items):
 
 
 def main(argv=None):
+    argv = list(sys.argv[1:] if argv is None else argv)
+    if argv and argv[0] == "reliability":
+        from .reliability import main as reliability_main
+        return reliability_main(argv[1:])
+    if argv and argv[0] == "reliability-export":
+        from .reliability_export import main as export_main
+        return export_main(argv[1:])
     parser = argparse.ArgumentParser(prog="jeval", description="Reproducible typed decision model evaluation")
     sub = parser.add_subparsers(dest="command", required=True)
     catalog = sub.add_parser("list", help="List implemented adapters and benchmarks")
@@ -80,6 +88,8 @@ def main(argv=None):
     matrix.add_argument("config")
     matrix.add_argument("--root")
     matrix.add_argument("--status")
+    sub.add_parser("reliability", help="Offline calibration, validation policies and independent test reports")
+    sub.add_parser("reliability-export", help="Export raw retained Valen runs without inference")
     args = parser.parse_args(argv)
     if args.command == "list":
         data = model_catalog() if args.kind == "models" else BENCHMARKS

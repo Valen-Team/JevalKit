@@ -21,6 +21,8 @@ class ValenModel(DecisionModel):
         attention="sdpa",
         execution="shared_state",
         root=None,
+        calibration=None,
+        calibration_protocol=None,
         **options,
     ):
         os.environ.setdefault("HF_MODULES_CACHE", str(data_root(root) / "cache" / "modules"))
@@ -41,10 +43,12 @@ class ValenModel(DecisionModel):
             .eval()
         )
         self.execution = execution
+        self.temperature = 1.0
         torch.set_float32_matmul_precision("highest")
         torch.backends.cudnn.allow_tf32 = False
         self.info = {
             "adapter": "ValenModel",
+            "device": device,
             "model": model,
             "revision": revision,
             "path": str(self.folder),
@@ -60,7 +64,20 @@ class ValenModel(DecisionModel):
             "artifacts_sha256": inference_artifacts(self.folder),
         }
 
+        if calibration:
+            from ..reliability import load_calibration, digest, read_json
+            from ..reliability_export import runtime_identity
+            if not calibration_protocol:
+                raise ValueError("calibration_protocol JSON path is required to verify the deployment recipe")
+            identity = runtime_identity(self.info, read_json(calibration_protocol))
+            artifact = load_calibration(calibration, identity)
+            self.temperature = artifact["temperature"]
+            self.info.update(temperature=self.temperature, calibration_sha256=digest(artifact),
+                             calibration_protocol_sha256=identity["protocol_sha256"])
+
     def predict(self, request, *, media_root=None, assets=None):
+        if self.info.get("calibration_sha256") and "temperature" in request:
+            raise ValueError("Request temperature cannot override a fitted calibration")
         request = copy.deepcopy(request)
         state = request["state"]
         if not isinstance(state, str) and not is_message_state(state):
@@ -69,7 +86,7 @@ class ValenModel(DecisionModel):
         try:
             with self.torch.inference_mode():
                 return self.model.predict(
-                    request, media_root=str(media_root or "."), execution=self.execution
+                    request, media_root=str(media_root or "."), execution=self.execution, temperature=self.temperature
                 )
         except ValueError as exc:
             if "exceed max_length" in str(exc) or "Reserved tokenizer control token" in str(exc):

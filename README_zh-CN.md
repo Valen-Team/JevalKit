@@ -211,3 +211,8 @@ OpenAI-Decisions 仍待实际评测。[🤗 打开排行榜](https://huggingface
 
 JevalKit 采用 [Apache-2.0](LICENSE) 许可。感谢 [VLMEvalKit](https://github.com/open-compass/VLMEvalKit)
 提供的评测工具设计参考，以及各决策模型和基准的作者。
+
+
+## 概率可靠性与自动处理
+
+离线复用逐题预测，拟合并保存温度参数，在独立验证集冻结自动处理阈值，再报告测试集的覆盖率与错误率。支持校准前后 NLL、Brier、ECE、可靠性曲线与失败计数；不改变现有官方评分。参见 [完整流程与缓存协议](docs/reliability.md)。无需下载模型即可拟合和复评。

@@ -234,3 +234,8 @@ Bug reports and contributions are welcome through
 JevalKit is released under [Apache-2.0](LICENSE).
 We thank [VLMEvalKit](https://github.com/open-compass/VLMEvalKit) for its evaluation
 toolkit design, and the authors of the integrated decision models and benchmarks.
+
+
+## Probability reliability and automation
+
+Reuse per-question predictions offline, fit and save temperatures, freeze automation thresholds on separate validation data, then measure held-out coverage and accepted error. Reports include before/after NLL, Brier, ECE, reliability curves and failure counts, without changing official scoring. See the [workflow and cache protocol](docs/reliability.md). Fitting and replay need no model downloads.
