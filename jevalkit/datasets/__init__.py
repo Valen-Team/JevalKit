@@ -25,6 +25,8 @@ BENCHMARKS = {
     },
     "JevBench": {"family": "JevBench", "modality": "text", "module": "jevbench"},
     "DecisionIndex": {"family": "DecisionIndex", "modality": "text", "module": "decision_index"},
+    "DecisionIndex_Text": {"family": "DecisionIndex", "modality": "text", "module": "decision_index_text", "edition": "0.4.1"},
+    "DecisionIndex_Vision": {"family": "DecisionIndex", "modality": "image", "module": "decision_index_vision", "edition": "0.4.1"},
     "TypedDecisions": {"family": "TypedDecisions", "modality": "text", "module": "typed_decisions"},
     "DecisionBench": {"family": "DecisionBench", "modality": "text", "module": "decision_bench"},
     "ProceduralTypedDecisions": {
@@ -48,9 +50,9 @@ def published_manifest(name):
     raise FileNotFoundError("No published dataset metadata or local manifest for: " + name)
 
 
-def prepare_dataset(name, root=None, source=None, edition="0.3"):
+def prepare_dataset(name, root=None, source=None, edition=None):
     module = import_module("." + BENCHMARKS[name]["module"], __name__)
-    return module.prepare(root=root, source=source, edition=edition)
+    return module.prepare(root=root, source=source, edition=edition or BENCHMARKS[name].get("edition", "0.3"))
 
 
 def official_report(dataset, records, predictions, output):
@@ -61,6 +63,17 @@ def official_report(dataset, records, predictions, output):
         if scorer:
             return scorer(dataset, records, predictions, output)
     return None
+
+
+def configure_model_options(dataset, model_name, options):
+    """Apply a benchmark's explicit native runtime requirements before provenance is sealed."""
+    module_name = BENCHMARKS.get(dataset.name, {}).get("module")
+    if module_name:
+        module = import_module("." + module_name, __name__)
+        configure = getattr(module, "configure_model_options", None)
+        if configure:
+            return configure(model_name, dict(options))
+    return dict(options)
 
 
 class DecisionDataset:

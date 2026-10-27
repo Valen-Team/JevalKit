@@ -54,8 +54,9 @@ def build_leaderboard(inputs, output):
             metrics = report["metrics"]["overall"]
             created = load_json(manifest).get("created_utc", "")
             input_conformant = report.get("validation", {}).get("inference_input_conformant", True)
-            eligible = report["complete"] and not report["smoke"] and metrics["failed"] == 0 and metrics["valid"] > 0 and input_conformant
             official = report.get("official", {})
+            official_valid = official.get("complete", True) and not official.get("counts", {}).get("error", 0)
+            eligible = report["complete"] and not report["smoke"] and metrics["failed"] == 0 and metrics["valid"] > 0 and input_conformant and official_valid
             rows.append({"model": report["model"], "benchmark": report["benchmark"],
                          "protocol": report["protocol"], "dataset_sha256": report["dataset_sha256"],
                          "complete": report["complete"], "smoke": report["smoke"], "eligible": eligible,

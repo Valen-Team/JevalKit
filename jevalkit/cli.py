@@ -43,7 +43,7 @@ def main(argv=None):
     prepare.add_argument("benchmarks", nargs="+", choices=BENCHMARKS)
     prepare.add_argument("--root")
     prepare.add_argument("--source", help="Existing native benchmark directory")
-    prepare.add_argument("--edition", default="0.3", choices=("0.2.1", "0.3"))
+    prepare.add_argument("--edition", choices=("0.2.1", "0.3", "0.4.1"))
     verify = sub.add_parser("verify", help="Verify TSV schemas, counts, hashes, optionally all media")
     verify.add_argument("benchmarks", nargs="+", choices=BENCHMARKS)
     verify.add_argument("--root")

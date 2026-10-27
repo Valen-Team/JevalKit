@@ -4,14 +4,14 @@
 
 [项目概览](../README_zh-CN.md) · [使用指南](quickstart_zh-CN.md) · [模型接入](models_zh-CN.md)
 
-JevalKit 接入了八个 Jev 相关基准家族，提供十个 TSV 数据视图。
-Image/Video 是 VisualDecisionBench 的子视图，不单独计为基准家族。
+JevalKit 接入了八个 Jev 相关基准家族，提供十二个 TSV 数据视图。
+Image/Video 子视图和 Decision Index 的 Text/Vision 轨道分别归属于各自的基准家族。
 
 | 家族 | 评测数据 | 评分 |
 |---|---|---|
 | VisualDecisionBench | 完整发布版 `eval.jsonl`：1,696 个共享输入、9,143 个问题，其中图像 2,000 个、视频 7,143 个 | 硬标签准确率；软标签 NLL/Brier；有序 MAE/RPS；按模态、类型、领域统计 |
 | JevBench | 231 个固定版本的公开任务：easy 48 个、original 72 个、hard 111 个 | 随包保存的官方任务评分器，以及校准、任务家族和释义变体报告 |
-| Decision Index | 0.3 版公开套件，应用原生子集和排除规则后共 140,178 个请求 | 上游版本专用评分器；随机水平校正后的加权公开指数；43 个组成数据集 |
+| Decision Index | 0.4.1 公开 Text：140,178 个请求；Vision：11 个基准、12,210 个问题；保留旧版 0.3 | 官方随机水平校正后的加权公开指数 |
 | Typed-Decisions | 固定版本 `all/test`：400 个共享输入、2,000 个问题 | 显式标签准确率；软参考分布 KL、Brier、交叉熵 |
 | DecisionBench | 固定版本标准 `eval`：23,900 条样本，三种决策原语 | 全样本准确率；候选项对齐后的 NLL 与校准；保留原始有序数值 |
 | Procedural Typed Decisions | 固定版本 `all/test`：18,000 个输入、57,016 个问题 | 精确规则判断；纯后验概率问题只计概率误差，不构造硬标签 |
@@ -28,6 +28,20 @@ Image/Video 是 VisualDecisionBench 的子视图，不单独计为基准家族�
 Decision Index 保留问题 ID、选项及顺序、结构化输入、标准答案、分组、官方排除规则和固定套件的来源元信息。
 没有标签的诊断问题仍保留在请求中，目标标记为 `{"unscored": true}`，不计入概率或准确率指标。
 主指标必须使用官方加权指数；通用字段准确率仅作诊断，不能替代该指数。
+
+`DecisionIndex_Text` 和 `DecisionIndex_Vision` 对应 **0.4.1 榜单的公开轨道**。
+官方 kit 中两者的公开集版本仍标记为 **0.3**：文本沿用 37 个基准的计分面板，
+视觉使用官方公布的 11 个基准及其权重。两项均报告公开分数；`DecisionIndex` 保留旧版文本协议。
+
+Vision TSV 保留图像顺序、原始问题及选项、输入和图像哈希，以及各引擎的提示元信息。
+Valen 在该轨道自动使用 **1,638,400 像素**的原生处理器上限，不接受更低预算。
+原始图像文件保持不变；原生决策头直接读取类型化问题，生成式引擎的助手续写前缀保存在来源元信息中。
+
+视觉集按[官方固定来源](https://github.com/apolinario/decision-index/blob/25c6ec7b6b5f44a216c63c3a700de3a9c6d6699d/docs/vision.md)
+在本地重建，需要已获批的 Winoground 访问权限，并通过 `DECISION_INDEX_FONT` 指定 Arial Bold。
+Pillow 12.3.0 可复现参考图像哈希。已有完整来源集时，可运行
+`python -m jevalkit prepare DecisionIndex_Vision --source /path/to/verified/vision`。
+原数据许可仍适用，转换过程不授予图像或 TSV 的再分发权限。
 
 推理输入不包含标准答案、推理说明、评测 ID 或来源元信息。
 原生运行时使用作者发布的温度和上下文限制。模型无法表示的模态或问题类型记为 unsupported，

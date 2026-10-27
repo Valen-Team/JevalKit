@@ -22,7 +22,7 @@ def install_digest_compat():
         hashlib.file_digest = file_digest
 
 
-def prepare(root=None, source=None, edition="0.3"):
+def prepare(root=None, source=None, edition="0.3", *, leaderboard_version=None):
     install_digest_compat()
     from decision_index import editions
     from decision_index.suite.io import Suite
@@ -32,7 +32,8 @@ def prepare(root=None, source=None, edition="0.3"):
     folder.mkdir(parents=True, exist_ok=True)
     if source:
         for name in editions.files(edition):
-            shutil.copyfile(Path(source) / name, folder / name)
+            if (Path(source) / name).resolve() != (folder / name).resolve():
+                shutil.copyfile(Path(source) / name, folder / name)
     else:
         from decision_index.suite.download import download
 
@@ -66,17 +67,22 @@ def prepare(root=None, source=None, edition="0.3"):
                 "assets": [],
             }
 
+    dataset_name = "DecisionIndex_Text" if leaderboard_version else "DecisionIndex"
+    source_metadata = {
+        "repository": "https://github.com/apolinario/decision-index",
+        "edition": edition,
+        "checks": checks,
+        "suite_manifest": suite.manifest(),
+    }
+    if leaderboard_version:
+        source_metadata.update(leaderboard_version=leaderboard_version, public_suite_edition=edition,
+                               score_scope="public_text", kit_revision="25c6ec7b6b5f44a216c63c3a700de3a9c6d6699d")
     return commit_dataset(
-        "DecisionIndex",
+        dataset_name,
         records(),
         root,
-        {
-            "repository": "https://github.com/apolinario/decision-index",
-            "edition": edition,
-            "checks": checks,
-            "suite_manifest": suite.manifest(),
-        },
-        protocol="official-public-" + edition,
+        source_metadata,
+        protocol="official-public-text-" + leaderboard_version if leaderboard_version else "official-public-" + edition,
         suite_dir="../raw/DecisionIndex-" + edition,
     )
 

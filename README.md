@@ -85,7 +85,7 @@ hf download Valen-Team/JevalKit_Datasets --repo-type dataset \
   --include "datasets/JevBench.tsv" --local-dir "$JEVALKIT_DATA_ROOT"
 ```
 
-The published TSVs are ready to evaluate. To download all ten views, replace
+The published TSVs are ready to evaluate. To download all published views, replace
 `datasets/JevBench.tsv` with `datasets/*.tsv`. Visual media and Decision Index
 scoring inputs have separate downloads in the [usage guide](docs/quickstart.md#download-data).
 
@@ -155,7 +155,7 @@ the [integration guide](docs/models.md).
 |---|---|---|---|
 | [VisualDecisionBench](https://huggingface.co/datasets/Valen-Team/VisualDecisionBench) | 🖼️ Image · 🎬 Video | 1,696 states; 9,143 questions | Accuracy, soft-target Brier/NLL, ordinal metrics |
 | [JevBench](https://github.com/fstandhartinger/jevbench) | 📝 Text | 231 public tasks across easy/original/hard tiers | Official task scores and calibration |
-| [Decision Index](https://huggingface.co/spaces/multimodalart/jev-decision-index) | 📝 Text | Edition 0.3 public suite; 43 constituent datasets | Official chance-corrected, weighted public index |
+| [Decision Index](https://huggingface.co/spaces/multimodalart/jev-decision-index) | 📝 Text · 🖼️ Image | 0.4.1 public tracks: 140,178 text requests; 12,210 vision questions | Official weighted public text and vision indices |
 | [Typed-Decisions](https://huggingface.co/datasets/LocalLLaMA/typed-decisions) | 📝 Text | 400 states; 2,000 decisions | Modal accuracy, KL and soft-target Brier |
 | [DecisionBench](https://huggingface.co/datasets/Hanno-Labs/decision-bench) | 📝 Text | 23,900 evaluation rows; 43 tasks | Accuracy, reference NLL and calibration |
 | [Procedural Typed Decisions](https://huggingface.co/datasets/tasksource/procedural-typed-decisions) | 📝 Text | 18,000 test states; 57,016 questions | Rule execution and exact probability judgments |

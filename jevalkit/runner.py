@@ -82,6 +82,11 @@ def run(
     if any(is_credential_key(key) for key in options):
         raise ValueError("Pass a token_env variable name, never a credential value")
     dataset = DecisionDataset(benchmark, root)
+    from .datasets import configure_model_options
+
+    options = configure_model_options(dataset, model_name, options)
+    if any(is_credential_key(key) for key in options):
+        raise ValueError("Pass a token_env variable name, never a credential value")
     output = Path(output)
     output.mkdir(parents=True, exist_ok=True)
     with (output / ".run.lock").open("w") as lock:

@@ -73,7 +73,7 @@ hf download Valen-Team/JevalKit_Datasets --repo-type dataset \
   --include "datasets/JevBench.tsv" --local-dir "$JEVALKIT_DATA_ROOT"
 ```
 
-发布的 TSV 可直接用于评测。将 `datasets/JevBench.tsv` 改为 `datasets/*.tsv` 可下载全部十个视图。
+发布的 TSV 可直接用于评测。将 `datasets/JevBench.tsv` 改为 `datasets/*.tsv` 可下载全部已发布视图。
 VisualDecisionBench 的媒体文件和 Decision Index 的评分输入需另行下载，见[使用指南](docs/quickstart_zh-CN.md#download-data)。
 
 ### 3. 运行评测并比较结果
@@ -139,7 +139,7 @@ python -m jevalkit leaderboard "$JEVALKIT_DATA_ROOT/results" \
 |---|---|---|---|
 | [VisualDecisionBench](https://huggingface.co/datasets/Valen-Team/VisualDecisionBench) | 🖼️ 图像 · 🎬 视频 | 1,696 个共享输入；9,143 个问题 | 准确率、软标签 Brier/NLL、有序评分指标 |
 | [JevBench](https://github.com/fstandhartinger/jevbench) | 📝 文本 | 231 个公开任务，分为简单、原始、困难三档 | 官方任务得分与校准指标 |
-| [Decision Index](https://huggingface.co/spaces/multimodalart/jev-decision-index) | 📝 文本 | 0.3 版公开套件，包含 43 个数据集 | 官方随机水平校正后的加权公开指数 |
+| [Decision Index](https://huggingface.co/spaces/multimodalart/jev-decision-index) | 📝 文本 · 🖼️ 图像 | 0.4.1 公开轨道：140,178 条文本请求；12,210 个视觉问题 | 官方加权文本、视觉公开指数 |
 | [Typed-Decisions](https://huggingface.co/datasets/LocalLLaMA/typed-decisions) | 📝 文本 | 400 个共享输入；2,000 个决策问题 | 标签准确率、KL、软标签 Brier |
 | [DecisionBench](https://huggingface.co/datasets/Hanno-Labs/decision-bench) | 📝 文本 | 23,900 条评测样本；43 个任务 | 准确率、参考 NLL、校准指标 |
 | [Procedural Typed Decisions](https://huggingface.co/datasets/tasksource/procedural-typed-decisions) | 📝 文本 | 18,000 个测试输入；57,016 个问题 | 规则执行与精确概率判断 |

@@ -37,7 +37,8 @@ python -m zipfile -e "$JEVALKIT_DATA_ROOT/media/VisualDecisionBench/assets.zip" 
   "$JEVALKIT_DATA_ROOT/media/VisualDecisionBench"
 ```
 
-For Decision Index, install its scorer and download the edition 0.3 scoring inputs:
+For Decision Index, install its scorer and download the edition 0.3 public text
+inputs, also used by the 0.4.1 board:
 
 ```bash
 python -m pip install -e '.[decision-index]'
@@ -46,6 +47,22 @@ hf download multimodalart/decision-index-suite-0.3 \
   excluded-questions.json manifest.json --repo-type dataset \
   --local-dir "$JEVALKIT_DATA_ROOT/raw/DecisionIndex-0.3"
 ```
+
+Prepare the 0.4.1 public Text/Vision TSVs with the official converters:
+
+```bash
+python -m jevalkit prepare DecisionIndex_Text \
+  --source "$JEVALKIT_DATA_ROOT/raw/DecisionIndex-0.3"
+python -m pip install 'pillow==12.3.0'
+export DECISION_INDEX_FONT="/path/to/arialbd.ttf"
+python -m jevalkit prepare DecisionIndex_Vision
+```
+
+Vision preparation downloads the pinned original sources and verifies their
+reference hashes. It requires approved [Winoground access](https://huggingface.co/datasets/facebook/winoground)
+for the account authenticated with `hf auth login`, plus Arial Bold for Mind2Web.
+Use `--data DecisionIndex_Text DecisionIndex_Vision` when running the two public
+tracks. Valen's native image budget is set automatically; see the [protocols](benchmarks.md).
 
 ## Download a model and evaluate
 

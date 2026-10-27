@@ -4,14 +4,14 @@
 
 [Project overview](../README.md) · [Running evaluations](quickstart.md) · [Model integrations](models.md)
 
-Eight Jev-related benchmark families are implemented, exposed through ten TSV views. The Image/Video
-views are subdivisions of VisualDecisionBench, not additional benchmark families.
+Eight Jev-related benchmark families are implemented, exposed through twelve TSV views. The
+Image/Video views and Decision Index Text/Vision tracks belong to their respective families.
 
 | Family | Evaluation data | Scoring |
 |---|---|---|
 | VisualDecisionBench | Full released `eval.jsonl`, 1,696 shared states, 9,143 questions: 2,000 image and 7,143 video | Hard-label accuracy; soft-label NLL/Brier; ordinal MAE/RPS; modality/type/domain breakdowns |
 | JevBench | 231 frozen public tasks: 48 easy, 72 original, 111 hard | Vendored official task scorer, calibration and family/paraphrase reports |
-| Decision Index | Edition 0.3 public suite, 140,178 requests after native subset/exclusion rules | Upstream edition-specific, chance-corrected weighted public index; 43 constituent datasets |
+| Decision Index | 0.4.1 public Text: 140,178 requests; Vision: 12,210 questions across 11 benchmarks; legacy 0.3 retained | Official chance-corrected weighted public indices |
 | Typed-Decisions | Pinned `all/test`: 400 shared states, 2,000 questions | Explicit modal-label accuracy; soft-reference KL, Brier and cross-entropy |
 | DecisionBench | Pinned standard `eval`: 23,900 rows, three primitives | All-row accuracy; candidate-aligned NLL and calibration; original ordinal values |
 | Procedural Typed Decisions | Pinned `all/test`: 18,000 states, 57,016 questions | Exact rule judgments; pure posterior questions use probability error without invented hard labels |
@@ -34,6 +34,24 @@ Unlabeled diagnostic questions remain in the request and carry an explicit
 `{"unscored": true}` target. They do not contribute to probability or accuracy
 metrics. The official scorer is required for the headline weighted index;
 generic field accuracy is a separate diagnostic, not a replacement.
+
+`DecisionIndex_Text` and `DecisionIndex_Vision` target board release **0.4.1**.
+The official kit still labels both public suites **0.3**: text uses the unchanged
+37-benchmark index panel; vision uses the eleven published benchmark weights.
+Both scores cover the public part. `DecisionIndex` retains the legacy text protocol.
+
+Vision TSVs preserve image order, original question/options, payload and image hashes,
+and the engine-specific prompt metadata. Valen runs automatically use the board's
+**1,638,400-pixel** native processor budget; a lower budget is rejected for this track.
+Original source images remain unchanged. Native decision heads read the typed
+questions directly; generative assistant readout prefixes remain source metadata.
+
+Rebuild vision from the [official pinned sources](https://github.com/apolinario/decision-index/blob/25c6ec7b6b5f44a216c63c3a700de3a9c6d6699d/docs/vision.md),
+with Winoground access approved on Hugging Face and Arial Bold supplied through
+`DECISION_INDEX_FONT`; Pillow 12.3.0 reproduces the reference image hashes.
+Use `python -m jevalkit prepare DecisionIndex_Vision --source /path/to/verified/vision`
+for an existing suite. These source licenses require local reconstruction; the
+toolkit does not grant permission to redistribute the resulting images or TSVs.
 
 Inference never receives gold labels, rationales, evaluation IDs or source
 metadata. Native runtimes retain their published temperatures and context limits.

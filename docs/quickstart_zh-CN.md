@@ -38,7 +38,7 @@ python -m zipfile -e "$JEVALKIT_DATA_ROOT/media/VisualDecisionBench/assets.zip" 
   "$JEVALKIT_DATA_ROOT/media/VisualDecisionBench"
 ```
 
-Decision Index 需安装评分器并下载 0.3 版评分输入：
+Decision Index 需安装评分器并下载 0.3 版公开文本输入，0.4.1 榜单也沿用这部分数据：
 
 ```bash
 python -m pip install -e '.[decision-index]'
@@ -47,6 +47,21 @@ hf download multimodalart/decision-index-suite-0.3 \
   excluded-questions.json manifest.json --repo-type dataset \
   --local-dir "$JEVALKIT_DATA_ROOT/raw/DecisionIndex-0.3"
 ```
+
+使用官方转换器准备 0.4.1 的公开 Text/Vision TSV：
+
+```bash
+python -m jevalkit prepare DecisionIndex_Text \
+  --source "$JEVALKIT_DATA_ROOT/raw/DecisionIndex-0.3"
+python -m pip install 'pillow==12.3.0'
+export DECISION_INDEX_FONT="/path/to/arialbd.ttf"
+python -m jevalkit prepare DecisionIndex_Vision
+```
+
+Vision 准备过程会下载固定版本的原始数据并核对参考哈希。
+通过 `hf auth login` 登录的账号需已获批 [Winoground 访问权限](https://huggingface.co/datasets/facebook/winoground)，
+Mind2Web 还需要 Arial Bold 字体。评测两个公开轨道时使用
+`--data DecisionIndex_Text DecisionIndex_Vision`。Valen 的原生图像预算会自动设置，详见[评分协议](benchmarks_zh-CN.md)。
 
 ## 下载模型并评测
 

@@ -20,11 +20,14 @@ class ValenModel(DecisionModel):
         revision="main",
         attention="sdpa",
         execution="shared_state",
+        max_image_pixels=None,
         root=None,
         calibration=None,
         calibration_protocol=None,
         **options,
     ):
+        if max_image_pixels is not None and (type(max_image_pixels) is not int or max_image_pixels < 65536):
+            raise ValueError("max_image_pixels must be an integer of at least 65536")
         os.environ.setdefault("HF_MODULES_CACHE", str(data_root(root) / "cache" / "modules"))
         from transformers import AutoModel
         import torch
@@ -44,6 +47,11 @@ class ValenModel(DecisionModel):
         )
         self.execution = execution
         self.temperature = 1.0
+        if max_image_pixels is not None:
+            media = copy.deepcopy(self.model.config.valen_media_kwargs)
+            size = media.setdefault("images_kwargs", {}).setdefault("size", {})
+            size.update(longest_edge=max_image_pixels, shortest_edge=min(size.get("shortest_edge", 65536), max_image_pixels))
+            self.model.config.valen_media_kwargs = media
         torch.set_float32_matmul_precision("highest")
         torch.backends.cudnn.allow_tf32 = False
         self.info = {
@@ -63,6 +71,9 @@ class ValenModel(DecisionModel):
             "hardware": torch.cuda.get_device_name(device) if device.startswith("cuda") else "cpu",
             "artifacts_sha256": inference_artifacts(self.folder),
         }
+        if max_image_pixels is not None:
+            self.info["max_image_pixels"] = max_image_pixels
+            self.info["image_budget_scope"] = "native processor images_kwargs.size.longest_edge"
 
         if calibration:
             from ..reliability import load_calibration, digest, read_json

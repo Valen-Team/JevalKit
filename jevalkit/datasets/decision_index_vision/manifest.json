@@ -1,0 +1,20 @@
+{
+  "datasets": [
+    {
+      "schema_version": 1,
+      "name": "DecisionIndex_Vision",
+      "media_root": "../raw/DecisionIndexVision-0.4.1",
+      "suite_dir": "../raw/DecisionIndexVision-0.4.1",
+      "protocol": "official-public-vision-0.4.1",
+      "records": 12210,
+      "questions": 12210,
+      "source": {
+        "repository": "https://github.com/apolinario/decision-index",
+        "edition": "0.3",
+        "leaderboard_version": "0.4.1",
+        "score_scope": "public_vision"
+      },
+      "sha256": "66c38b3fbbad0877d826d29c8ab4c5177e0afd5c8aab870f75c95a2d5a546920"
+    }
+  ]
+}
