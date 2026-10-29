@@ -140,7 +140,7 @@ variant; per-benchmark coverage is shown in the [leaderboard](https://huggingfac
 
 </details>
 
-The catalog also includes a `Uniform` diagnostic baseline and general LLM baselines (`LLM-OpenAI`, `LLM-Anthropic`, `LLM-Gemini`) for comparing decision models with LLMs on agreement, latency and tokens. Author dependencies,
+The catalog also includes a `Uniform` diagnostic baseline and general LLM baselines (`LLM-OpenAI`, `LLM-Anthropic`, `LLM-Gemini`) for comparing decision models with LLMs on agreement, latency and tokens; the same comparison runs inside applications through the Python SDK's [`Valen.llm`](https://github.com/Valen-Team/valen-sdk-python#compare-with-an-llm). Author dependencies,
 context limits, supported question types and media contracts are documented in
 the [integration guide](docs/models.md).
 

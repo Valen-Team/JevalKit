@@ -125,7 +125,7 @@ python -m jevalkit leaderboard "$JEVALKIT_DATA_ROOT/results" \
 
 </details>
 
-注册表还包含用于流程诊断的 `Uniform` 基线，以及通用 LLM 基线（`LLM-OpenAI`、`LLM-Anthropic`、`LLM-Gemini`），用于在一致率、延迟和 token 用量上对比决策模型与大模型。作者依赖、上下文限制、问题类型和媒体输入约定见
+注册表还包含用于流程诊断的 `Uniform` 基线，以及通用 LLM 基线（`LLM-OpenAI`、`LLM-Anthropic`、`LLM-Gemini`），用于在一致率、延迟和 token 用量上对比决策模型与大模型；在应用代码中可通过 Python SDK 的 [`Valen.llm`](https://github.com/Valen-Team/valen-sdk-python/blob/main/README_zh.md#与大模型对比) 做同样的对比。作者依赖、上下文限制、问题类型和媒体输入约定见
 [模型接入说明](docs/models_zh-CN.md)。
 
 <a id="supported-benchmarks"></a>
