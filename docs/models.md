@@ -4,7 +4,7 @@
 
 [Project overview](../README.md) · [Running evaluations](quickstart.md) · [Scoring protocols](benchmarks.md)
 
-Twenty families are registered; size variants do not increase that count.
+Twenty families are registered, plus the Uniform and general LLM baselines; size variants do not increase that count.
 Native adapters invoke the author release. HTTP adapters require the author server or hosted API.
 Registration is not evidence of a successful weight-level evaluation: consult the leaderboard and its manifests.
 
@@ -33,6 +33,9 @@ Registration is not evidence of a successful weight-level evaluation: consult th
 | Visual-Jev | Visual-Jev | native | author vdm package; `--option source=<checkout>/code` `--option base_model=<Qwen3-VL weights>` | [source](https://github.com/guanxuyu-sv/Visual-Jev) |
 | Jev | Jev | http | Jev API access and JEV_ENDPOINT (full /v1/systemone URL) | [source](https://typesafe.ai) |
 | OpenAI-Decisions | OpenAI-Decisions | http | OPENAI_API_KEY | [source](https://developers.openai.com/api/docs/guides/decisions) |
+| LLM-OpenAI | LLM | http | OPENAI_API_KEY; `--option model=<model ID>` (default gpt-4o-mini) | [source](https://platform.openai.com/docs/guides/structured-outputs) |
+| LLM-Anthropic | LLM | http | ANTHROPIC_API_KEY; `--option model=<model ID>` (default claude-haiku-4-5) | [source](https://docs.anthropic.com/en/docs/build-with-claude/structured-outputs) |
+| LLM-Gemini | LLM | http | GEMINI_API_KEY; `--option model=<model ID>` (default gemini-3.5-flash-lite) | [source](https://ai.google.dev/gemini-api/docs/structured-output) |
 | Kev | Kev | http | author kev.serve instance; KEV_ENDPOINT (full /v1/systemone URL) | [source](https://github.com/jaredpalmer/kev) |
 | H2O-Lightning | H2O-Lightning | http | author serve.sh instance; H2O_ENDPOINT (full /v1/systemone URL) | [source](https://huggingface.co/h2oai/h2o-lightning-4b) |
 | OpenJev | OpenJev | http | author helper/shim.py instance; OPENJEV_ENDPOINT (full /v1/systemone URL) | [source](https://huggingface.co/openjev/openjev) |
@@ -134,3 +137,19 @@ register its import path in `jevalkit/config.py`. Size variants can share the sa
 implementation. Keep author imports inside initialization so other models remain
 usable without that SDK. Reuse `_http.py` or `_hf.py` for matching calling conventions.
 Run `jeval check --model <name> --output check.json` and the relevant adapter tests.
+
+## General LLM baselines
+
+`LLM-OpenAI`, `LLM-Anthropic` and `LLM-Gemini` run general-purpose LLMs on the same benchmarks,
+so decision models can be compared with them on agreement, latency and token usage. Each request
+sends the evidence (text and images) and every question with its candidates, and asks for a
+probability per candidate through the provider's JSON-schema structured output. JevalKit
+normalizes each question's probabilities and records token usage in `predictions.jsonl`.
+`LLM-OpenAI` uses Chat Completions, so `--option endpoint=<URL>` also reaches OpenAI-compatible
+providers such as Fireworks, Groq or a local vLLM server; pass `--option token_env=<VARIABLE>` for
+their key. Video inputs are reported as unsupported; extract frames as images instead.
+
+```bash
+python -m jevalkit run --model LLM-OpenAI --option model=gpt-4o-mini --data VisualDecisionBench_Image \
+  --output "$JEVALKIT_DATA_ROOT/results"
+```

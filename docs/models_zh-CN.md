@@ -4,7 +4,7 @@
 
 [项目概览](../README_zh-CN.md) · [使用指南](quickstart_zh-CN.md) · [评分协议](benchmarks_zh-CN.md)
 
-当前注册了 20 个模型家族，同一家族的尺寸变体不重复计数。
+当前注册了 20 个模型家族，另有 Uniform 和通用 LLM 基线；同一家族的尺寸变体不重复计数。
 原生适配器调用作者发布的实现，HTTP 适配器连接作者服务或托管 API。
 注册只表示接入了接口，实际权重评测情况需查看排行榜及对应 manifest。
 
@@ -33,6 +33,9 @@
 | Visual-Jev | Visual-Jev | 原生接口 | 作者的 vdm 包； `--option source=<checkout>/code` `--option base_model=<Qwen3-VL weights>` | [源码](https://github.com/guanxuyu-sv/Visual-Jev) |
 | Jev | Jev | HTTP | Jev API 访问权限及 JEV_ENDPOINT (完整 /v1/systemone 地址) | [源码](https://typesafe.ai) |
 | OpenAI-Decisions | OpenAI-Decisions | HTTP | OPENAI_API_KEY | [源码](https://developers.openai.com/api/docs/guides/decisions) |
+| LLM-OpenAI | LLM | HTTP | OPENAI_API_KEY；`--option model=<模型 ID>`（默认 gpt-4o-mini） | [源码](https://platform.openai.com/docs/guides/structured-outputs) |
+| LLM-Anthropic | LLM | HTTP | ANTHROPIC_API_KEY；`--option model=<模型 ID>`（默认 claude-haiku-4-5） | [源码](https://docs.anthropic.com/en/docs/build-with-claude/structured-outputs) |
+| LLM-Gemini | LLM | HTTP | GEMINI_API_KEY；`--option model=<模型 ID>`（默认 gemini-3.5-flash-lite） | [源码](https://ai.google.dev/gemini-api/docs/structured-output) |
 | Kev | Kev | HTTP | 作者的 kev.serve 服务； KEV_ENDPOINT (完整 /v1/systemone 地址) | [源码](https://github.com/jaredpalmer/kev) |
 | H2O-Lightning | H2O-Lightning | HTTP | 作者的 serve.sh 服务； H2O_ENDPOINT (完整 /v1/systemone 地址) | [源码](https://huggingface.co/h2oai/h2o-lightning-4b) |
 | OpenJev | OpenJev | HTTP | 作者的 helper/shim.py 服务； OPENJEV_ENDPOINT (完整 /v1/systemone 地址) | [源码](https://huggingface.co/openjev/openjev) |
@@ -119,3 +122,17 @@ StartLux v1.1 Instant 使用作者的 `startlux-decide serve` 服务，通过 `S
 尺寸变体可共用实现。作者包应在初始化时导入，避免其他模型因缺少该 SDK 而无法使用。
 调用约定相同的实现可复用 `_http.py` 或 `_hf.py`。
 使用 `jeval check --model <name> --output check.json` 检查接口，并运行相关适配器测试。
+
+## 通用 LLM 基线
+
+`LLM-OpenAI`、`LLM-Anthropic` 和 `LLM-Gemini` 在同一批基准上运行通用大模型，便于把决策模型与它们在一致率、
+延迟和 token 用量上直接比较。每次请求发送证据（文本和图像）以及全部问题和候选项，通过各家的 JSON Schema
+结构化输出，要求给每个候选项一个概率。JevalKit 对每个问题的概率做归一化，并把 token 用量记录在
+`predictions.jsonl` 中。`LLM-OpenAI` 走 Chat Completions，因此用 `--option endpoint=<URL>` 也能接入
+Fireworks、Groq 或本地 vLLM 等 OpenAI 兼容服务，对应的 Key 用 `--option token_env=<变量名>` 指定。
+视频输入会报告为不支持，请先抽帧作为图像发送。
+
+```bash
+python -m jevalkit run --model LLM-OpenAI --option model=gpt-4o-mini --data VisualDecisionBench_Image \
+  --output "$JEVALKIT_DATA_ROOT/results"
+```

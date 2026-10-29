@@ -184,6 +184,21 @@ register(
     transport="http",
     requirements="OPENAI_API_KEY",
 )
+for name, provider, default in (
+    ("LLM-OpenAI", "openai", "gpt-4o-mini"),
+    ("LLM-Anthropic", "anthropic", "claude-haiku-4-5"),
+    ("LLM-Gemini", "gemini", "gemini-3.5-flash-lite"),
+):
+    register(
+        name,
+        "LLM",
+        "jevalkit.models.llm:LLMDecisionModel",
+        default,
+        "https://valen-team.github.io/docs/jevalkit/models/",
+        options={"provider": provider},
+        transport="http",
+        requirements=f"{provider.upper()}_API_KEY; --option model=<model ID>",
+    )
 register(
     "Kev",
     "Kev",

@@ -140,7 +140,7 @@ variant; per-benchmark coverage is shown in the [leaderboard](https://huggingfac
 
 </details>
 
-The catalog also includes a `Uniform` diagnostic baseline. Author dependencies,
+The catalog also includes a `Uniform` diagnostic baseline and general LLM baselines (`LLM-OpenAI`, `LLM-Anthropic`, `LLM-Gemini`) for comparing decision models with LLMs on agreement, latency and tokens. Author dependencies,
 context limits, supported question types and media contracts are documented in
 the [integration guide](docs/models.md).
 
