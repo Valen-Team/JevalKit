@@ -123,7 +123,10 @@ class LLMDecisionModel(HttpDecisionModel):
         if self.provider == "gemini":
             usage = response.get("usageMetadata", {})
             text = "".join(part.get("text", "") for part in response["candidates"][0]["content"]["parts"])
-            return text, {"input_tokens": usage.get("promptTokenCount"), "output_tokens": usage.get("candidatesTokenCount")}
+            # Gemini bills thinking tokens as output, as OpenAI and Anthropic count them.
+            output = usage.get("candidatesTokenCount")
+            return text, {"input_tokens": usage.get("promptTokenCount"),
+                          "output_tokens": None if output is None else output + usage.get("thoughtsTokenCount", 0)}
         usage = response.get("usage") or {}
         return response["choices"][0]["message"]["content"], {
             "input_tokens": usage.get("prompt_tokens"), "output_tokens": usage.get("completion_tokens"),

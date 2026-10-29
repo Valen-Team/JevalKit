@@ -25,7 +25,7 @@ def provider_response(provider, text):
                 "usage": {"input_tokens": 120, "output_tokens": 40}}
     if provider == "gemini":
         return {"candidates": [{"content": {"parts": [{"text": text}]}}],
-                "usageMetadata": {"promptTokenCount": 120, "candidatesTokenCount": 40}}
+                "usageMetadata": {"promptTokenCount": 120, "candidatesTokenCount": 30, "thoughtsTokenCount": 10}}
     return {"choices": [{"message": {"content": text}}], "usage": {"prompt_tokens": 120, "completion_tokens": 40}}
 
 
