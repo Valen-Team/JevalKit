@@ -16,6 +16,7 @@ api = ["pillow>=10"]
 hf = ["torch>=2.6", "torchvision>=0.21", "transformers>=5.4", "huggingface-hub>=0.26", "pillow", "av>=16.1", "safetensors", "accelerate"]
 data = ["huggingface-hub>=0.26", "datasets>=3", "pyarrow>=18"]
 decision-index = ["decision-index[vision] @ git+https://github.com/apolinario/decision-index.git@25c6ec7b6b5f44a216c63c3a700de3a9c6d6699d", "httpx[socks]>=0.27,<1"]
+workflow = ["pydantic>=2", "huggingface-hub>=0.26", "pyarrow>=18"]
 test = ["pytest>=8"]
 
 [project.scripts]
@@ -26,6 +27,9 @@ include = ["jevalkit*"]
 
 [tool.setuptools.package-data]
 "*" = ["manifest.json"]
+"jevalkit" = ["pricing.json"]
+"jevalkit.workflows.delivery_support" = ["cases.json"]
+"jevalkit.workflows.invoice_processing.upstream" = ["LICENSE"]
 "jevalkit.datasets.jevbench.official" = ["LICENSE"]
 
 [tool.setuptools]

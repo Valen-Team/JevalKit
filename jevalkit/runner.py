@@ -11,6 +11,7 @@ from . import __version__
 from .datasets import DecisionDataset
 from .io import atomic_json, dumps, load_json, object_hash, sha256
 from .metrics import grouped_report, score_predictions
+from .pricing import rates_for
 from .schema import Unsupported, inference_request, is_capacity_error
 from .security import is_credential_key
 
@@ -183,6 +184,8 @@ def run(
                             exception=type(exc).__name__,
                             error=str(exc),
                         )
+                        if getattr(exc, "usage", None):
+                            prediction["usage"] = exc.usage
                     prediction["latency_s"] = time.perf_counter() - started
                     stream.write(dumps(prediction) + "\n")
                     stream.flush()
@@ -208,7 +211,8 @@ def run(
                         )
         finally:
             model.close()
-        metrics = grouped_report(score_predictions(records, predictions))
+        rates = rates_for(runtime)
+        metrics = grouped_report(score_predictions(records, predictions, rates))
         report = {
             "schema_version": 1,
             "model": model_name,
@@ -223,6 +227,7 @@ def run(
             "complete": len(predictions) == dataset.manifest["records"] and world_size == 1,
             "smoke": limit is not None,
             "metrics": metrics,
+            "pricing": rates,
             "runtime": runtime,
             "predictions_sha256": sha256(journal),
             "manifest_sha256": sha256(manifest_path),
@@ -320,7 +325,8 @@ def merge_shards(model_name, benchmark, shard_dirs, output, *, root=None):
         "world_size": first["world_size"],
         "complete": True,
         "smoke": False,
-        "metrics": grouped_report(score_predictions(records, predictions)),
+        "metrics": grouped_report(score_predictions(records, predictions, rates_for(first["runtime"]))),
+        "pricing": rates_for(first["runtime"]),
         "runtime": first["runtime"],
         "predictions_sha256": sha256(journal),
         "manifest_sha256": sha256(output / "manifest.json"),
@@ -377,7 +383,8 @@ def score_saved_run(folder, root=None):
             "rank": signature.get("rank"),
             "world_size": signature["world_size"],
             "runtime": manifest["runtime"],
-            "metrics": grouped_report(score_predictions(records, predictions)),
+            "metrics": grouped_report(score_predictions(records, predictions, rates_for(manifest["runtime"]))),
+            "pricing": rates_for(manifest["runtime"]),
             "manifest_sha256": sha256(manifest_path),
             "predictions_sha256": sha256(folder / "predictions.jsonl"),
             "rescoring": {

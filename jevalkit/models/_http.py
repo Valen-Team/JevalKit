@@ -84,7 +84,10 @@ class HttpDecisionModel(DecisionModel):
         return None
 
     def request_headers(self):
-        headers = {"Content-Type": "application/json"}
+        from .. import __version__
+
+        # Cloudflare-fronted endpoints, including Valen's hosted API, reject urllib's default agent.
+        headers = {"Content-Type": "application/json", "User-Agent": "jevalkit/" + __version__}
         token = os.environ.get(self.token_env)
         if token:
             headers["Authorization"] = "Bearer " + token

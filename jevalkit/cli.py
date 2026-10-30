@@ -31,6 +31,12 @@ def main(argv=None):
     if argv and argv[0] == "reliability":
         from .reliability import main as reliability_main
         return reliability_main(argv[1:])
+    if argv and argv[0] == "analyze":
+        from .analyze import main as analyze_main
+        return analyze_main(argv[1:])
+    if argv and argv[0] == "workflow":
+        from .workflows.cli import main as workflow_main
+        return workflow_main(argv[1:])
     if argv and argv[0] == "reliability-export":
         from .reliability_export import main as export_main
         return export_main(argv[1:])
@@ -90,6 +96,8 @@ def main(argv=None):
     matrix.add_argument("--status")
     sub.add_parser("reliability", help="Offline calibration, validation policies and independent test reports")
     sub.add_parser("reliability-export", help="Export raw retained Valen runs without inference")
+    sub.add_parser("analyze", help="Find slices where a run trails its average and the other runs")
+    sub.add_parser("workflow", help="Run and score end-to-end workflows with decisions in code")
     args = parser.parse_args(argv)
     if args.command == "list":
         data = model_catalog() if args.kind == "models" else BENCHMARKS

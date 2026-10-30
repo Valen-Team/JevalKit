@@ -118,6 +118,7 @@ variant; per-benchmark coverage is shown in the [leaderboard](https://huggingfac
 | Model family | Registered model IDs | Interface | Evaluation |
 |---|---|---|---|
 | [Valen](https://github.com/Valen-Team/Valen) | `Valen-0.8B`, `Valen-2B`, `Valen-4B` | Native | Measured |
+| [Valen API](https://valen-team.github.io/docs/valen/api/) | `Valen-API-0.8B`, `Valen-API-2B`, `Valen-API-4B` | Hosted API | Measured on `delivery_support` |
 | [Intern-Decision](https://github.com/InternLM/Intern-Decision) | `Intern-Decision-0.8B`, `Intern-Decision-2B`, `Intern-Decision-4B` | Native | Measured |
 | [Laya](https://github.com/NandhaKishorM/laya) | `Laya` | Native | Measured |
 | [Liquid d1](https://huggingface.co/LiquidAI/d1-3B) | `Liquid-d1-3B` | Native | Measured |
@@ -140,7 +141,7 @@ variant; per-benchmark coverage is shown in the [leaderboard](https://huggingfac
 
 </details>
 
-The catalog also includes a `Uniform` diagnostic baseline and general LLM baselines (`LLM-OpenAI`, `LLM-Anthropic`, `LLM-Gemini`) for comparing decision models with LLMs on agreement, latency and tokens; the same comparison runs inside applications through the Python SDK's [`Valen.llm`](https://github.com/Valen-Team/valen-sdk-python#compare-with-an-llm). Author dependencies,
+The catalog also includes a `Uniform` diagnostic baseline and general LLM baselines (`LLM-OpenAI`, `LLM-Anthropic`, `LLM-Gemini`) for comparing decision models with LLMs on agreement, latency, tokens and estimated cost; the same comparison runs inside applications through the Python SDK's [`Valen.llm`](https://github.com/Valen-Team/valen-sdk-python#compare-with-an-llm). Author dependencies,
 context limits, supported question types and media contracts are documented in
 the [integration guide](docs/models.md).
 
@@ -194,6 +195,7 @@ Read the [JevalKit documentation](https://valen-team.github.io/docs/jevalkit/) o
 | [Running evaluations](docs/quickstart.md) | Downloads, evaluation commands, resume, APIs and parallel runs |
 | [Model integrations](docs/models.md) | Author SDKs, runtime dependencies and input limits |
 | [Scoring protocols](docs/benchmarks.md) | Dataset definitions, probability metrics and official scorers |
+| [Workflows, cost and weak slices](docs/workflows.md) | End-to-end workflows with decisions in code, LLM cost, slice analysis |
 
 <a id="contributing"></a>
 

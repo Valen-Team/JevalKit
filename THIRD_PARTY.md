@@ -18,6 +18,14 @@ modules. Weights, model code and benchmark datasets retain their own licenses.
 Dataset manifests record source repositories, revisions, splits and checksums.
 Do not treat JevalKit's Apache-2.0 license as a relicensing of those assets.
 
+`jevalkit/workflows/invoice_processing/upstream/` is `evals/invoice_processing/structured/`
+from [typesafe-ai/WorkflowEvals](https://github.com/typesafe-ai/WorkflowEvals), revision
+`0ac3b8ad845429f0d8e064ecfb2430a47c5a25cb`, Apache-2.0 (license retained in that directory). Only its
+`typesafe_sdk` import was changed, to `jevalkit.workflows.sdk_types`. `jevalkit/pricing.json` takes its rates
+from the same repository's `core/pricing.json`. The workflow's cases and reference labels are downloaded from
+[typesafeAI/evalsafe-invoice-processing](https://huggingface.co/datasets/typesafeAI/evalsafe-invoice-processing),
+Apache-2.0, at the revision recorded in each run.
+
 OpenAI Decisions uses the documented `/v1/decisions` schema:
 https://developers.openai.com/api/reference/resources/decisions/methods/create
 The adapter maps Noul to Predicate and preserves ordered Score levels.

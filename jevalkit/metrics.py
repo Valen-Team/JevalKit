@@ -3,7 +3,13 @@
 import math
 from collections import defaultdict
 
-from .schema import answer_probabilities, is_capacity_error, target_label, target_probabilities
+from .io import dumps
+from .pricing import cost_usd, usage_tokens
+from .schema import (
+    answer_probabilities, candidates, is_capacity_error, is_message_state, target_label, target_probabilities,
+)
+
+SLICES = ("type", "subset", "domain", "modality", "script", "state_size", "candidates")
 
 
 def question_metrics(question, target, probabilities, candidate_order=None):
@@ -79,12 +85,50 @@ def summarize(rows):
     out["ece"] = ece if calibrated else None
     latency = sorted(r["latency_s"] for r in rows if "latency_s" in r)
     out["request_latency_mean_s"] = sum(latency) / len(latency) if latency else None
+    # Usage and cost belong to requests; a total is unknown if any request lacks it.
+    requests = [r for r in rows if "latency_s" in r]
+    for name in ("input_tokens", "output_tokens", "cost_usd"):
+        values = [r.get(name) for r in requests]
+        out[name + "_total"] = sum(values) if values and None not in values else None
+    out["cost_usd_per_request"] = out["cost_usd_total"] / len(requests) if out["cost_usd_total"] is not None else None
     return out
+
+
+def state_text(state):
+    if isinstance(state, str):
+        return state
+    if is_message_state(state):
+        return "\n".join(
+            message["content"] if isinstance(message["content"], str)
+            else "\n".join(part.get("text", "") for part in message["content"] if part.get("type") == "text")
+            for message in state["messages"]
+        )
+    return dumps(state)
+
+
+def script(text):
+    if any("\u3040" <= c <= "\u9fff" or "\uac00" <= c <= "\ud7af" for c in text):
+        return "cjk"
+    return "latin" if any("a" <= c.lower() <= "z" for c in text) else "other"
+
+
+def bucket(value, edges, labels):
+    return next((label for edge, label in zip(edges, labels) if value < edge), labels[-1])
+
+
+def slices(record, question):
+    """Input properties that every benchmark shares, for finding where a model is weak."""
+    text = state_text(record["request"]["state"])
+    return {
+        "script": script(text),
+        "state_size": bucket(len(text), (1000, 4000, 16000), ("<1k", "1k-4k", "4k-16k", "16k+")),
+        "candidates": bucket(len(candidates(question)), (3, 5, 9), ("2", "3-4", "5-8", "9+")),
+    }
 
 
 def grouped_report(rows):
     groups = {}
-    for name in ("type", "subset", "domain", "modality"):
+    for name in SLICES:
         buckets = defaultdict(list)
         for row in rows:
             buckets[str(row.get(name, "unknown"))].append(row)
@@ -92,7 +136,7 @@ def grouped_report(rows):
     return {"overall": summarize(rows), "groups": groups}
 
 
-def score_predictions(dataset, predictions):
+def score_predictions(dataset, predictions, rates=None):
     rows = []
     by_id = {p["index"]: p for p in predictions}
     for record in dataset:
@@ -109,12 +153,16 @@ def score_predictions(dataset, predictions):
                 "scorable": truth is not None,
                 "status": prediction["status"],
                 **{k: record["meta"].get(k, "unknown") for k in ("subset", "domain", "modality")},
+                **slices(record, question),
             }
             if prediction["status"] == "error" and is_capacity_error(prediction.get("error", "")):
                 row["status"] = "unsupported"
             # Latency belongs to shared requests, not to every question in the batch.
             if qid == next(iter(record["request"]["questions"])):
                 row["latency_s"] = prediction["latency_s"]
+                # A failed request keeps the usage its provider billed, when reported.
+                tokens = usage_tokens(prediction.get("response") or prediction)
+                row.update(input_tokens=tokens[0], output_tokens=tokens[1], cost_usd=cost_usd(rates, *tokens))
             if prediction["status"] == "ok":
                 try:
                     answer = prediction["response"]["answers"][qid]

@@ -103,6 +103,7 @@ python -m jevalkit leaderboard "$JEVALKIT_DATA_ROOT/results" \
 | 模型家族 | 注册模型 ID | 接口 | 评测状态 |
 |---|---|---|---|
 | [Valen](https://github.com/Valen-Team/Valen) | `Valen-0.8B`, `Valen-2B`, `Valen-4B` | 原生接口 | 已实测 |
+| [Valen API](https://valen-team.github.io/docs/valen/api/) | `Valen-API-0.8B`, `Valen-API-2B`, `Valen-API-4B` | 托管 API | 已在 `delivery_support` 实测 |
 | [Intern-Decision](https://github.com/InternLM/Intern-Decision) | `Intern-Decision-0.8B`, `Intern-Decision-2B`, `Intern-Decision-4B` | 原生接口 | 已实测 |
 | [Laya](https://github.com/NandhaKishorM/laya) | `Laya` | 原生接口 | 已实测 |
 | [Liquid d1](https://huggingface.co/LiquidAI/d1-3B) | `Liquid-d1-3B` | 原生接口 | 已实测 |
@@ -125,7 +126,7 @@ python -m jevalkit leaderboard "$JEVALKIT_DATA_ROOT/results" \
 
 </details>
 
-注册表还包含用于流程诊断的 `Uniform` 基线，以及通用 LLM 基线（`LLM-OpenAI`、`LLM-Anthropic`、`LLM-Gemini`），用于在一致率、延迟和 token 用量上对比决策模型与大模型；在应用代码中可通过 Python SDK 的 [`Valen.llm`](https://github.com/Valen-Team/valen-sdk-python/blob/main/README_zh.md#与大模型对比) 做同样的对比。作者依赖、上下文限制、问题类型和媒体输入约定见
+注册表还包含用于流程诊断的 `Uniform` 基线，以及通用 LLM 基线（`LLM-OpenAI`、`LLM-Anthropic`、`LLM-Gemini`），用于在一致率、延迟、token 用量和估算成本上对比决策模型与大模型；在应用代码中可通过 Python SDK 的 [`Valen.llm`](https://github.com/Valen-Team/valen-sdk-python/blob/main/README_zh.md#与大模型对比) 做同样的对比。作者依赖、上下文限制、问题类型和媒体输入约定见
 [模型接入说明](docs/models_zh-CN.md)。
 
 <a id="supported-benchmarks"></a>
@@ -173,6 +174,7 @@ OpenAI-Decisions 仍待实际评测。[🤗 打开排行榜](https://huggingface
 |---|---|
 | [使用指南](docs/quickstart_zh-CN.md) | 下载、评测命令、断点恢复、API 和并行任务 |
 | [模型接入](docs/models_zh-CN.md) | 作者 SDK、运行依赖和输入限制 |
+| [Workflow、成本与薄弱切片](docs/workflows.md) | 决策写在代码里的端到端 workflow、LLM 成本、按切片找弱点 |
 | [评分协议](docs/benchmarks_zh-CN.md) | 数据集定义、概率指标和官方评分器 |
 
 <a id="contributing"></a>

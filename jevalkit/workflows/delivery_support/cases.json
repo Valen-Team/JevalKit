@@ -1,0 +1,602 @@
+[
+ {
+  "id": "x01",
+  "message": "It's been over an hour. Is my food even coming?",
+  "order_status": "on_the_way",
+  "expected": {
+   "queue": "late_order",
+   "safety": false,
+   "compensation": false
+  }
+ },
+ {
+  "id": "x02",
+  "message": "Order arrived 45 minutes after the promised time. Not acceptable. Give me a voucher.",
+  "order_status": "delivered",
+  "expected": {
+   "queue": "late_order",
+   "safety": false,
+   "compensation": true
+  }
+ },
+ {
+  "id": "x03",
+  "message": "外卖已经超时半小时了，骑手一直不动",
+  "order_status": "on_the_way",
+  "expected": {
+   "queue": "late_order",
+   "safety": false,
+   "compensation": false
+  }
+ },
+ {
+  "id": "x04",
+  "message": "wow, only 70 minutes for a 2km delivery. amazing service as always",
+  "order_status": "delivered",
+  "expected": {
+   "queue": "late_order",
+   "safety": false,
+   "compensation": false
+  }
+ },
+ {
+  "id": "x05",
+  "message": "ETA keeps changing from 10 to 25 to 40 minutes, what's going on",
+  "order_status": "on_the_way",
+  "expected": {
+   "queue": "late_order",
+   "safety": false,
+   "compensation": false
+  }
+ },
+ {
+  "id": "x06",
+  "message": "Rider is going the wrong way on the map, food will be cold by the time it gets here",
+  "order_status": "on_the_way",
+  "expected": {
+   "queue": "late_order",
+   "safety": false,
+   "compensation": false
+  }
+ },
+ {
+  "id": "x07",
+  "message": "送达时间比预计晚了很久，能补偿一张优惠券吗？",
+  "order_status": "delivered",
+  "expected": {
+   "queue": "late_order",
+   "safety": false,
+   "compensation": true
+  }
+ },
+ {
+  "id": "x08",
+  "message": "still waiting",
+  "order_status": "on_the_way",
+  "expected": {
+   "queue": "late_order",
+   "safety": false,
+   "compensation": false
+  }
+ },
+ {
+  "id": "x09",
+  "message": "I ordered chicken rice, got duck rice instead. I don't eat duck.",
+  "order_status": "delivered",
+  "expected": {
+   "queue": "missing_or_wrong_item",
+   "safety": false,
+   "compensation": false
+  }
+ },
+ {
+  "id": "x10",
+  "message": "Missing the extra egg I paid for",
+  "order_status": "delivered",
+  "expected": {
+   "queue": "missing_or_wrong_item",
+   "safety": false,
+   "compensation": false
+  }
+ },
+ {
+  "id": "x11",
+  "message": "The whole bag is someone else's order, name on the receipt is Daniel",
+  "order_status": "delivered",
+  "expected": {
+   "queue": "missing_or_wrong_item",
+   "safety": false,
+   "compensation": false
+  }
+ },
+ {
+  "id": "x12",
+  "message": "收到的是别人的外卖，不是我点的",
+  "order_status": "delivered",
+  "expected": {
+   "queue": "missing_or_wrong_item",
+   "safety": false,
+   "compensation": false
+  }
+ },
+ {
+  "id": "x13",
+  "message": "Only 2 of the 3 burgers came. Please refund the missing one.",
+  "order_status": "delivered",
+  "expected": {
+   "queue": "missing_or_wrong_item",
+   "safety": false,
+   "compensation": true
+  }
+ },
+ {
+  "id": "x14",
+  "message": "I asked for no peanuts because of my allergy and the noodles came with peanuts. My throat feels itchy.",
+  "order_status": "delivered",
+  "expected": {
+   "queue": "missing_or_wrong_item",
+   "safety": true,
+   "compensation": false
+  }
+ },
+ {
+  "id": "x15",
+  "message": "App shows delivered, photo shows a door that isn't mine. No food.",
+  "order_status": "delivered",
+  "expected": {
+   "queue": "missing_or_wrong_item",
+   "safety": false,
+   "compensation": false
+  }
+ },
+ {
+  "id": "x16",
+  "message": "no drinks in the bag",
+  "order_status": "delivered",
+  "expected": {
+   "queue": "missing_or_wrong_item",
+   "safety": false,
+   "compensation": false
+  }
+ },
+ {
+  "id": "x17",
+  "message": "The chicken was pink inside, totally raw",
+  "order_status": "delivered",
+  "expected": {
+   "queue": "food_quality",
+   "safety": true,
+   "compensation": false
+  }
+ },
+ {
+  "id": "x18",
+  "message": "Soup leaked all over the bag, nothing salvageable",
+  "order_status": "delivered",
+  "expected": {
+   "queue": "food_quality",
+   "safety": false,
+   "compensation": false
+  }
+ },
+ {
+  "id": "x19",
+  "message": "Both of us had stomach cramps and diarrhoea a few hours after eating the prawns",
+  "order_status": "delivered",
+  "expected": {
+   "queue": "food_quality",
+   "safety": true,
+   "compensation": false
+  }
+ },
+ {
+  "id": "x20",
+  "message": "汤是冷的，面也糊了，要求退款",
+  "order_status": "delivered",
+  "expected": {
+   "queue": "food_quality",
+   "safety": false,
+   "compensation": true
+  }
+ },
+ {
+  "id": "x21",
+  "message": "Pizza arrived flipped upside down, cheese stuck to the lid",
+  "order_status": "delivered",
+  "expected": {
+   "queue": "food_quality",
+   "safety": false,
+   "compensation": false
+  }
+ },
+ {
+  "id": "x22",
+  "message": "There was a hair in my salad. Disgusting. Refund please.",
+  "order_status": "delivered",
+  "expected": {
+   "queue": "food_quality",
+   "safety": true,
+   "compensation": true
+  }
+ },
+ {
+  "id": "x23",
+  "message": "The milk tea tastes sour, I think the milk went bad",
+  "order_status": "delivered",
+  "expected": {
+   "queue": "food_quality",
+   "safety": true,
+   "compensation": false
+  }
+ },
+ {
+  "id": "x24",
+  "message": "Great, soggy fries again. Third time this month.",
+  "order_status": "delivered",
+  "expected": {
+   "queue": "food_quality",
+   "safety": false,
+   "compensation": false
+  }
+ },
+ {
+  "id": "x25",
+  "message": "You said I'd get a refund 5 days ago and I still have nothing",
+  "order_status": "cancelled",
+  "expected": {
+   "queue": "payment_refund",
+   "safety": false,
+   "compensation": true
+  }
+ },
+ {
+  "id": "x26",
+  "message": "Cancelled the order within a minute but I was still charged",
+  "order_status": "cancelled",
+  "expected": {
+   "queue": "payment_refund",
+   "safety": false,
+   "compensation": false
+  }
+ },
+ {
+  "id": "x27",
+  "message": "My voucher code says invalid at checkout but it expires next month",
+  "order_status": "none",
+  "expected": {
+   "queue": "payment_refund",
+   "safety": false,
+   "compensation": false
+  }
+ },
+ {
+  "id": "x28",
+  "message": "怎么把付款方式换成 PayNow？",
+  "order_status": "none",
+  "expected": {
+   "queue": "payment_refund",
+   "safety": false,
+   "compensation": false
+  }
+ },
+ {
+  "id": "x29",
+  "message": "Why was there a $3 'small order fee'? Nobody told me",
+  "order_status": "delivered",
+  "expected": {
+   "queue": "payment_refund",
+   "safety": false,
+   "compensation": false
+  }
+ },
+ {
+  "id": "x30",
+  "message": "退款什么时候到账？客服说三天，已经一周了",
+  "order_status": "cancelled",
+  "expected": {
+   "queue": "payment_refund",
+   "safety": false,
+   "compensation": true
+  }
+ },
+ {
+  "id": "x31",
+  "message": "Card got charged $58 but the order total was $38",
+  "order_status": "delivered",
+  "expected": {
+   "queue": "payment_refund",
+   "safety": false,
+   "compensation": false
+  }
+ },
+ {
+  "id": "x32",
+  "message": "Where is my refund",
+  "order_status": "cancelled",
+  "expected": {
+   "queue": "payment_refund",
+   "safety": false,
+   "compensation": true
+  }
+ },
+ {
+  "id": "x33",
+  "message": "Someone logged into my account and placed orders I didn't make",
+  "order_status": "none",
+  "expected": {
+   "queue": "account_access",
+   "safety": false,
+   "compensation": false
+  }
+ },
+ {
+  "id": "x34",
+  "message": "I changed my phone number, how do I update it on my account?",
+  "order_status": "none",
+  "expected": {
+   "queue": "account_access",
+   "safety": false,
+   "compensation": false
+  }
+ },
+ {
+  "id": "x35",
+  "message": "账号被锁了，说我登录太多次",
+  "order_status": "none",
+  "expected": {
+   "queue": "account_access",
+   "safety": false,
+   "compensation": false
+  }
+ },
+ {
+  "id": "x36",
+  "message": "Verification email never arrives, checked spam already",
+  "order_status": "none",
+  "expected": {
+   "queue": "account_access",
+   "safety": false,
+   "compensation": false
+  }
+ },
+ {
+  "id": "x37",
+  "message": "forgot password and the reset link is broken",
+  "order_status": "none",
+  "expected": {
+   "queue": "account_access",
+   "safety": false,
+   "compensation": false
+  }
+ },
+ {
+  "id": "x38",
+  "message": "I want to delete my account and all my data",
+  "order_status": "none",
+  "expected": {
+   "queue": "human_review",
+   "safety": false,
+   "compensation": false
+  }
+ },
+ {
+  "id": "x39",
+  "message": "Order was super late AND they forgot my drink",
+  "order_status": "delivered",
+  "expected": {
+   "queue": "human_review",
+   "safety": false,
+   "compensation": false
+  }
+ },
+ {
+  "id": "x40",
+  "message": "The curry was cold and I was also charged twice",
+  "order_status": "delivered",
+  "expected": {
+   "queue": "human_review",
+   "safety": false,
+   "compensation": false
+  }
+ },
+ {
+  "id": "x41",
+  "message": "晚了一个小时，而且鸡翅少了两个",
+  "order_status": "delivered",
+  "expected": {
+   "queue": "human_review",
+   "safety": false,
+   "compensation": false
+  }
+ },
+ {
+  "id": "x42",
+  "message": "Wrong noodles came, and now I can't even log in to report it properly",
+  "order_status": "delivered",
+  "expected": {
+   "queue": "human_review",
+   "safety": false,
+   "compensation": false
+  }
+ },
+ {
+  "id": "x43",
+  "message": "Your rider ran a red light and nearly hit a kid outside my block",
+  "order_status": "delivered",
+  "expected": {
+   "queue": "human_review",
+   "safety": true,
+   "compensation": false
+  }
+ },
+ {
+  "id": "x44",
+  "message": "The rider was smoking right next to my food and yelled at me",
+  "order_status": "delivered",
+  "expected": {
+   "queue": "human_review",
+   "safety": true,
+   "compensation": false
+  }
+ },
+ {
+  "id": "x45",
+  "message": "How do I become a rider with you?",
+  "order_status": "none",
+  "expected": {
+   "queue": "human_review",
+   "safety": false,
+   "compensation": false
+  }
+ },
+ {
+  "id": "x46",
+  "message": "I own a cafe and want to list it on Fastbite",
+  "order_status": "none",
+  "expected": {
+   "queue": "human_review",
+   "safety": false,
+   "compensation": false
+  }
+ },
+ {
+  "id": "x47",
+  "message": "Do you deliver to Sentosa?",
+  "order_status": "none",
+  "expected": {
+   "queue": "human_review",
+   "safety": false,
+   "compensation": false
+  }
+ },
+ {
+  "id": "x48",
+  "message": "Food was delicious, five stars to the restaurant",
+  "order_status": "delivered",
+  "expected": {
+   "queue": "human_review",
+   "safety": false,
+   "compensation": false
+  }
+ },
+ {
+  "id": "x49",
+  "message": "ok",
+  "order_status": "none",
+  "expected": {
+   "queue": "human_review",
+   "safety": false,
+   "compensation": false
+  }
+ },
+ {
+  "id": "x50",
+  "message": "你们的 app 新版本好难用",
+  "order_status": "none",
+  "expected": {
+   "queue": "human_review",
+   "safety": false,
+   "compensation": false
+  }
+ },
+ {
+  "id": "x51",
+  "message": "Can I schedule an order for tomorrow lunch?",
+  "order_status": "none",
+  "expected": {
+   "queue": "human_review",
+   "safety": false,
+   "compensation": false
+  }
+ },
+ {
+  "id": "x52",
+  "message": "I need an invoice with my company name for this order",
+  "order_status": "delivered",
+  "expected": {
+   "queue": "human_review",
+   "safety": false,
+   "compensation": false
+  }
+ },
+ {
+  "id": "x53",
+  "message": "Rider was really patient even though I gave the wrong address, please thank him",
+  "order_status": "delivered",
+  "expected": {
+   "queue": "human_review",
+   "safety": false,
+   "compensation": false
+  }
+ },
+ {
+  "id": "x54",
+  "message": "hi i have a problem",
+  "order_status": "none",
+  "expected": {
+   "queue": "human_review",
+   "safety": false,
+   "compensation": false
+  }
+ },
+ {
+  "id": "x55",
+  "message": "This is the worst. Rice was hard as rocks. I'm never ordering again unless you refund me.",
+  "order_status": "delivered",
+  "expected": {
+   "queue": "food_quality",
+   "safety": false,
+   "compensation": true
+  }
+ },
+ {
+  "id": "x56",
+  "message": "My kid found a metal staple in his burger. I want my money back and an explanation.",
+  "order_status": "delivered",
+  "expected": {
+   "queue": "food_quality",
+   "safety": true,
+   "compensation": true
+  }
+ },
+ {
+  "id": "x57",
+  "message": "Food came 30 min late and the rider was riding on the pavement at full speed",
+  "order_status": "delivered",
+  "expected": {
+   "queue": "late_order",
+   "safety": true,
+   "compensation": false
+  }
+ },
+ {
+  "id": "x58",
+  "message": "Sauce missing again. Give me a voucher this time.",
+  "order_status": "delivered",
+  "expected": {
+   "queue": "missing_or_wrong_item",
+   "safety": false,
+   "compensation": true
+  }
+ },
+ {
+  "id": "x59",
+  "message": "The 20% promo wasn't applied to my order even though it showed in the cart",
+  "order_status": "delivered",
+  "expected": {
+   "queue": "payment_refund",
+   "safety": false,
+   "compensation": false
+  }
+ },
+ {
+  "id": "x60",
+  "message": "My account was hacked and they used my saved card for 3 orders",
+  "order_status": "none",
+  "expected": {
+   "queue": "human_review",
+   "safety": false,
+   "compensation": false
+  }
+ }
+]

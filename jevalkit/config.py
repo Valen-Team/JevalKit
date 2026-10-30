@@ -175,6 +175,16 @@ register(
     transport="http",
     requirements="Jev API access and JEV_ENDPOINT (full /v1/systemone URL)",
 )
+for size in ("0.8B", "2B", "4B"):
+    register(
+        "Valen-API-" + size,
+        "Valen",
+        "jevalkit.models.valen_api:ValenAPIModel",
+        "valen-" + size.lower(),
+        "https://valen-team.github.io/docs/valen/api/",
+        transport="http",
+        requirements="none for the free API; --option endpoint=<keyed /v1/systemone URL> with VALEN_API_KEY",
+    )
 register(
     "OpenAI-Decisions",
     "OpenAI-Decisions",

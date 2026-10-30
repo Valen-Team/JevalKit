@@ -25,7 +25,8 @@ class LLMDecisionModel(HttpDecisionModel):
 
     retryable_statuses = HttpDecisionModel.retryable_statuses | {529}
 
-    def __init__(self, provider="openai", model="gpt-4o-mini", endpoint=None, token_env=None, max_tokens=4096, **options):
+    def __init__(self, provider="openai", model="gpt-4o-mini", endpoint=None, token_env=None, max_tokens=4096,
+                 billing=None, **options):
         if provider not in ENDPOINTS:
             raise ValueError("provider must be one of: " + ", ".join(ENDPOINTS))
         super().__init__(
@@ -35,6 +36,8 @@ class LLMDecisionModel(HttpDecisionModel):
             **options,
         )
         self.provider, self.max_tokens = provider, int(max_tokens)
+        # The lab whose list price applies when an OpenAI-compatible gateway serves another lab's model.
+        self.billing = billing or provider
 
     def request_headers(self):
         headers = {"Content-Type": "application/json"}
@@ -133,7 +136,23 @@ class LLMDecisionModel(HttpDecisionModel):
         }
 
     def predict(self, request, *, media_root=None, assets=None):
-        text, usage = self.parse_response(self.post(self.build_payload(request, media_root)))
+        response = self.post(self.build_payload(request, media_root))
+        text, usage = self.parse_response(response)
+        try:
+            raw, answers = self.read_answers(request, text)
+        except (KeyError, TypeError, ValueError) as exc:
+            exc.usage, exc.request_id = usage, response.get("id")  # An unusable answer is still billed.
+            raise
+        return {"answers": answers, "usage": usage, "model": self.model, "raw_probabilities": raw,
+                "request_id": response.get("id")}
+
+    @staticmethod
+    def read_answers(request, text):
+        text = text.strip()
+        # Gateways that drop the structured-output setting return the JSON inside a Markdown fence.
+        if text.startswith("```") and text.endswith("```") and len(text) > 6:
+            text = text[3:-3].strip()
+            text = text[4:] if text.startswith("json") else text
         raw = json.loads(text)
         answers = {}
         for qid, q in request["questions"].items():
@@ -142,7 +161,7 @@ class LLMDecisionModel(HttpDecisionModel):
             if total <= 0:
                 raise ValueError(f"LLM returned zero probability mass for {qid}")
             answers[qid] = native_answer(q, {key: value / total for key, value in values.items()})
-        return {"answers": answers, "usage": usage, "model": self.model, "raw_probabilities": raw}
+        return raw, answers
 
     def metadata(self):
-        return {**super().metadata(), "provider": self.provider, "max_tokens": self.max_tokens}
+        return {**super().metadata(), "provider": self.provider, "billing": self.billing, "max_tokens": self.max_tokens}

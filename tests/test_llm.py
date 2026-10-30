@@ -67,3 +67,24 @@ def test_llm_provider_headers(monkeypatch):
     gemini = build_model("LLM-Gemini", model="gemini-test")
     assert gemini.request_headers()["x-goog-api-key"] == "fixture-gemini"
     assert gemini.endpoint.endswith("/models/gemini-test:generateContent")
+
+
+def test_llm_baseline_reads_json_inside_a_markdown_fence(monkeypatch):
+    model = build_model("LLM-Anthropic")
+    fenced = "```json\n" + json.dumps(ANSWER) + "\n```"
+    monkeypatch.setattr(model, "post", lambda payload: provider_response("anthropic", fenced))
+    assert model.predict(REQUEST)["answers"]["intent"]["choice"] == "change_address"
+
+
+def test_llm_baseline_keeps_billed_usage_when_the_answer_is_unusable(monkeypatch):
+    model = build_model("LLM-Anthropic")
+    monkeypatch.setattr(model, "post", lambda payload: provider_response("anthropic", "I cannot help with that."))
+    with pytest.raises(ValueError) as error:
+        model.predict(REQUEST)
+    assert error.value.usage == {"input_tokens": 120, "output_tokens": 40}
+
+
+def test_llm_baseline_reads_a_one_line_fence(monkeypatch):
+    model = build_model("LLM-Anthropic")
+    monkeypatch.setattr(model, "post", lambda payload: provider_response("anthropic", "```json " + json.dumps(ANSWER) + "```"))
+    assert model.predict(REQUEST)["answers"]["refund"]["noul"] == pytest.approx(0.1)
