@@ -154,9 +154,10 @@ def test_slices_usage_and_analysis_flag_a_weak_slice(tmp_path):
         assert report["overall"]["cost_usd_total"] == pytest.approx(60 * (10 * 0.15 + 2 * 0.6) / 1e6)
         atomic_json(tmp_path / name / "metrics.json",
                     {"model": name, "benchmark": "toy", "runtime": {}, "metrics": report})
-    result = analyze([tmp_path / "weak", tmp_path / "strong"], by=("script",))
+    result = analyze([tmp_path / "weak"], [tmp_path / "strong"], by=("script",))
     assert [(r["by"], r["slice"]) for r in result["flagged"]] == [("script", "cjk")]
     assert result["flagged"][0]["accuracy"] == {"weak": 0.4, "strong": 0.9}
+    assert result["flagged"][0]["reference_median"] == 0.9
 
 
 def rounded(value):
@@ -199,3 +200,33 @@ def test_invoice_port_reproduces_consensus_decisions_from_consensus_answers(tmp_
     assert report["status"]["ok"] == 150
     assert report["references"]["consensus"]["exact_actions"] == 1.0
     assert report["references"]["consensus"]["primary_action"] == 1.0
+
+
+def test_question_misses_lists_what_every_target_gets_wrong(tmp_path):
+    from jevalkit.analyze import markdown, question_misses
+    from jevalkit.datasets._shared import commit_dataset
+
+    records = [record("easy", "Short English message.", "a"), record("hard", "Short English message.", "b")]
+    commit_dataset("DecisionFixture", records, tmp_path, {"fixture": True}, protocol="test")
+
+    def save(name, answers):
+        folder = tmp_path / name
+        predictions = [{"index": r["index"], "status": "ok", "latency_s": 0.1,
+                        "response": {"answers": {"q": native_answer(r["request"]["questions"]["q"], answers[r["index"]])}}}
+                       for r in records]
+        folder.mkdir()
+        (folder / "predictions.jsonl").write_text("".join(json.dumps(p) + "\n" for p in predictions))
+        report = grouped_report(score_predictions(records, predictions))
+        atomic_json(folder / "metrics.json", {"model": name, "benchmark": "DecisionFixture", "runtime": {}, "metrics": report})
+        return folder
+
+    right = {"easy": {"a": 0.8, "b": 0.1, "c": 0.1}, "hard": {"a": 0.1, "b": 0.8, "c": 0.1}}
+    wrong_hard = {**right, "hard": {"a": 0.8, "b": 0.1, "c": 0.1}}
+    targets = [save("valen-small", wrong_hard), save("valen-large", wrong_hard)]
+    references = [save("ref-1", right), save("ref-2", right), save("ref-3", wrong_hard)]
+    misses = question_misses(targets, references, tmp_path, min_reference_share=0.6)
+    assert [(m["index"], m["expected"], m["reference_share"]) for m in misses] == [("hard", "b", pytest.approx(2 / 3))]
+    assert misses[0]["predicted"] == {"valen-small": "a", "valen-large": "a"}
+    assert "| hard |" in markdown(analyze(targets, references, by=("script",)), misses)
+    with pytest.raises(ValueError, match="distinct model name"):
+        question_misses(targets, [save("valen-small-copy", right), targets[0]], tmp_path)

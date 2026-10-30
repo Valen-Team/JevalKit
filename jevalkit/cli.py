@@ -96,7 +96,7 @@ def main(argv=None):
     matrix.add_argument("--status")
     sub.add_parser("reliability", help="Offline calibration, validation policies and independent test reports")
     sub.add_parser("reliability-export", help="Export raw retained Valen runs without inference")
-    sub.add_parser("analyze", help="Find slices where a run trails its average and the other runs")
+    sub.add_parser("analyze", help="Find slices and questions where target runs trail a reference group")
     sub.add_parser("workflow", help="Run and score end-to-end workflows with decisions in code")
     args = parser.parse_args(argv)
     if args.command == "list":

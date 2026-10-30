@@ -49,7 +49,8 @@ Self-hosted Valen has no token price; compare it by time per case, or add a rate
 Benchmark reports group every metric by question type, subset, domain, modality and three properties of the input: `script` (`cjk`, `latin`, `other`), `state_size` (`<1k`, `1k-4k`, `4k-16k`, `16k+` characters) and `candidates` (`2`, `3-4`, `5-8`, `9+`). Re-score older runs with `jeval score RUN` to add them.
 
 ```bash
-jeval analyze runs/Valen-4B/JevBench runs/LLM-OpenAI/JevBench runs/Valen-2B/JevBench --output analysis
+jeval analyze --targets runs/Valen-*/JevBench --references runs/Intern-Decision-*/JevBench runs/StartLux-*/JevBench \
+  --questions --output analysis
 ```
 
-The first run is analyzed. A slice is flagged when it has at least `--min-questions` hard questions and its accuracy is at least `--gap` (default 0.05) below both the run's overall accuracy and the best other run on that slice. A flagged slice is where to look, not a conclusion: read its questions, then confirm with targeted variations before recording a limitation.
+A slice is flagged when it has at least `--min-questions` hard questions and every target's accuracy is at least `--gap` (default 0.05) below both its own overall accuracy and the median of the reference group. `--questions` also lists hard questions every target answers wrong while at least `--min-reference-share` (default 0.75) of the references answer right; it needs the benchmark data under `--root`. A flagged slice is where to look, not a conclusion: read its questions, then confirm with targeted variations before recording a limitation.
