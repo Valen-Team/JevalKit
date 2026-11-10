@@ -41,6 +41,15 @@ for size in ("0.8B", "2B", "4B"):
         "https://github.com/InternLM/Intern-Decision",
         requirements="Python 3.12+; author requirements.txt",
     )
+for size in ("0.8B", "2B", "4B", "9B", "27B"):
+    checkpoint = "Valen-Team/Valen-Decision-1.5-" + size
+    register(
+        "Valen-Decision-1.5-" + size,
+        "Valen",
+        "jevalkit.models.valen:ValenModel",
+        checkpoint,
+        "https://huggingface.co/" + checkpoint,
+    )
 register(
     "Laya",
     "Laya",
@@ -242,6 +251,38 @@ register(
     },
     transport="http",
     requirements="author helper/shim.py instance; OPENJEV_ENDPOINT (full /v1/systemone URL)",
+)
+register(
+    "Amos-1-Large",
+    "Amos",
+    "jevalkit.models.amos:AmosModel",
+    "mukaddamzaid/amos-1-large",
+    "https://huggingface.co/mukaddamzaid/amos-1-large",
+    requirements="Python 3.12+; transformers 5.17; author serve/pyproject.toml",
+)
+register(
+    "vLLM-SR-d3-turbo",
+    "vLLM-SR-d3",
+    "jevalkit.models.d3:D3Model",
+    "vllm-sr/d3-turbo",
+    "https://huggingface.co/vllm-sr/d3-turbo",
+    requirements="Python 3.12+; transformers 5.17; author requirements.txt",
+)
+register(
+    "WeMM-JEV",
+    "WeMM-JEV",
+    "jevalkit.models.wemm_jev:WeMMJevModel",
+    "Rover00/WeMM-JEV",
+    "https://huggingface.co/Rover00/WeMM-JEV",
+    requirements="Python 3.12+; transformers 5.17; author requirements.txt",
+)
+register(
+    "Xing-VL2.0-Decision",
+    "Xing-VL",
+    "jevalkit.models.xing_vl:XingVLModel",
+    "RBDash-Team/Xing-VL2.0-Decision",
+    "https://huggingface.co/RBDash-Team/Xing-VL2.0-Decision",
+    requirements="Python 3.12+; transformers 5.17; author requirements.txt",
 )
 register(
     "Uniform", "baseline", "jevalkit.models.uniform:UniformModel", "uniform", "builtin", requirements="none"
