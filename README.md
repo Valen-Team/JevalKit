@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <a href="#supported-models"><img src="https://img.shields.io/badge/Models-20_families-007F6B?style=flat&amp;labelColor=1E232C" alt="20 model families"></a>
+  <a href="#supported-models"><img src="https://img.shields.io/badge/Models-24_families-007F6B?style=flat&amp;labelColor=1E232C" alt="24 model families"></a>
   <a href="#supported-benchmarks"><img src="https://img.shields.io/badge/Benchmarks-8_suites-007F6B?style=flat&amp;labelColor=1E232C" alt="8 Jev-related benchmark suites"></a>
   <a href="https://huggingface.co/spaces/Valen-Team/JevalKit-Leaderboard"><img src="https://img.shields.io/badge/Space-Leaderboard-007F6B?style=flat&amp;logo=huggingface&amp;logoColor=white&amp;labelColor=1E232C" alt="Hugging Face Space: leaderboard"></a>
   <a href="https://huggingface.co/datasets/Valen-Team/JevalKit_Datasets"><img src="https://img.shields.io/badge/Datasets-10_TSV_views-007F6B?style=flat&amp;logo=huggingface&amp;logoColor=white&amp;labelColor=1E232C" alt="Hugging Face: 10 dataset views"></a>
@@ -45,6 +45,9 @@ with the model or benchmark ID, and we can help add support for it.
 
 ## News
 
+- **2026-11-10:** Registered Valen-Decision-1.5 (0.8B, 2B, 4B, 9B and 27B) in the Valen
+  family and four new families: Amos, vLLM-SR d3, WeMM-JEV and Xing-VL. All nine
+  models are measured on the leaderboard, which now shows Decision Index 0.4.1 only.
 - **2026-10-19:** Released the [🤗 JevalKit Leaderboard](https://huggingface.co/spaces/Valen-Team/JevalKit-Leaderboard)
   with benchmark and model-size filters, model comparison, probability metrics
   and Markdown, TSV and JSON result exports. Complete evaluations, smoke tests
@@ -108,16 +111,16 @@ the same settings. [Full usage guide →](docs/quickstart.md)
 
 ## Supported Models
 
-Size variants and Clef/Clef-Flash count within their respective families.
+Size variants, Valen-Decision-1.5 and Clef/Clef-Flash count within their respective families.
 **Measured** means real inference has been verified for at least one registered
 variant; per-benchmark coverage is shown in the [leaderboard](https://huggingface.co/spaces/Valen-Team/JevalKit-Leaderboard).
 
 <details>
-<summary>View supported models (20 families)</summary>
+<summary>View supported models (24 families)</summary>
 
 | Model family | Registered model IDs | Interface | Evaluation |
 |---|---|---|---|
-| [Valen](https://github.com/Valen-Team/Valen) | `Valen-0.8B`, `Valen-2B`, `Valen-4B` | Native | Measured |
+| [Valen](https://github.com/Valen-Team/Valen) | `Valen-0.8B`, `Valen-2B`, `Valen-4B`, `Valen-Decision-1.5-{0.8B,2B,4B,9B,27B}` | Native | Measured |
 | [Valen API](https://valen-team.github.io/docs/valen/api/) | `Valen-API-0.8B`, `Valen-API-2B`, `Valen-API-4B` | Hosted API | Measured on `delivery_support` |
 | [Intern-Decision](https://github.com/InternLM/Intern-Decision) | `Intern-Decision-0.8B`, `Intern-Decision-2B`, `Intern-Decision-4B` | Native | Measured |
 | [Laya](https://github.com/NandhaKishorM/laya) | `Laya` | Native | Measured |
@@ -126,13 +129,17 @@ variant; per-benchmark coverage is shown in the [leaderboard](https://huggingfac
 | [Clef](https://huggingface.co/Cloudflare/clef) | `Clef`, `Clef-Flash` | Native | Measured |
 | [Pplx-Decider](https://huggingface.co/perplexity-ai/pplx-decider-v1.1-27b) | `Pplx-Decider` | Native | Measured |
 | [JevK5](https://huggingface.co/alibiserikbay/JevK5) | `JevK5` | Native | Measured |
-| [StartLux](https://github.com/StartLuxLabs/StartLux-Decision) | `StartLux-0.8B`, `StartLux-v1.1-{0.8B,2B,4B,9B,27B}-Instant` | Native / Author server | v1 measured; v1.1 pending |
+| [StartLux](https://github.com/StartLuxLabs/StartLux-Decision) | `StartLux-0.8B`, `StartLux-v1.1-{0.8B,2B,4B,9B,27B}-Instant` | Native / Author server | Measured |
 | [Crivo](https://huggingface.co/tardellirs/crivo-150m) | `Crivo-150M` | Native | Measured |
 | [RSI-Jev](https://github.com/Shanghua-Gao/RSI-Jev) | `RSI-Jev-v4` | Native | Measured |
 | [Vjev](https://huggingface.co/yah01/vjev-vision) | `Vjev-4B` | Native | Measured |
 | [QEV](https://github.com/ken-jo/qev) | `QEV` | Native | Measured |
 | [OmniJev](https://github.com/tinnel123666888/OmniJev) | `OmniJev` | Native | Measured |
 | [Visual-Jev](https://github.com/guanxuyu-sv/Visual-Jev) | `Visual-Jev` | Native | Measured |
+| [Amos](https://huggingface.co/mukaddamzaid/amos-1-large) | `Amos-1-Large` | Native | Measured |
+| [vLLM-SR d3](https://huggingface.co/vllm-sr/d3-turbo) | `vLLM-SR-d3-turbo` | Native | Measured |
+| [WeMM-JEV](https://huggingface.co/Rover00/WeMM-JEV) | `WeMM-JEV` | Native | Measured |
+| [Xing-VL](https://huggingface.co/RBDash-Team/Xing-VL2.0-Decision) | `Xing-VL2.0-Decision` | Native | Measured |
 | [Kev](https://github.com/jaredpalmer/kev) | `Kev` | Author server | Measured |
 | [H2O-Lightning](https://huggingface.co/h2oai/h2o-lightning-4b) | `H2O-Lightning` | Author server | Measured |
 | [OpenJev](https://huggingface.co/openjev/openjev) | `OpenJev` | Author server | Measured |

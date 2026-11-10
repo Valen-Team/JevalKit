@@ -4,7 +4,7 @@
 
 [Project overview](../README.md) · [Running evaluations](quickstart.md) · [Scoring protocols](benchmarks.md)
 
-Twenty families are registered, plus the Uniform and general LLM baselines; size variants do not increase that count.
+Twenty-four families are registered, plus the Uniform and general LLM baselines; size variants do not increase that count.
 Native adapters invoke the author release. HTTP adapters require the author server or hosted API.
 Registration is not evidence of a successful weight-level evaluation: consult the leaderboard and its manifests.
 
@@ -16,6 +16,7 @@ Registration is not evidence of a successful weight-level evaluation: consult th
 | Intern-Decision-2B | Intern-Decision | native | Python 3.12+; author requirements.txt | [source](https://github.com/InternLM/Intern-Decision) |
 | Valen-4B | Valen | native | jevalkit[hf] | [source](https://github.com/Valen-Team/Valen) |
 | Intern-Decision-4B | Intern-Decision | native | Python 3.12+; author requirements.txt | [source](https://github.com/InternLM/Intern-Decision) |
+| Valen-Decision-1.5-{0.8B,2B,4B,9B,27B} | Valen | native | jevalkit[hf] | [source](https://huggingface.co/Valen-Team) |
 | Laya | Laya | native | laya | [source](https://github.com/NandhaKishorM/laya) |
 | Liquid-d1-3B | Liquid-d1 | native | transformers>=5.14; author dependencies | [source](https://huggingface.co/LiquidAI/d1-3B) |
 | Decision1-Kai | vLLM-Decision1 | native | jevalkit[hf] | [source](https://huggingface.co/vllm-sr/Decision-1.0-Kai-0.6B) |
@@ -31,6 +32,10 @@ Registration is not evidence of a successful weight-level evaluation: consult th
 | QEV | QEV | native | author veyra package; `--option source=<checkout>/src` | [source](https://github.com/ken-jo/qev) |
 | OmniJev | OmniJev | native | author mso package; `--option source=<checkout>` `--option base_model=<Qwen3.5 weights>` | [source](https://github.com/tinnel123666888/OmniJev) |
 | Visual-Jev | Visual-Jev | native | author vdm package; `--option source=<checkout>/code` `--option base_model=<Qwen3-VL weights>` | [source](https://github.com/guanxuyu-sv/Visual-Jev) |
+| Amos-1-Large | Amos | native | Python 3.12+; transformers 5.17; author serve/pyproject.toml | [source](https://huggingface.co/mukaddamzaid/amos-1-large) |
+| vLLM-SR-d3-turbo | vLLM-SR-d3 | native | Python 3.12+; transformers 5.17; author requirements.txt | [source](https://huggingface.co/vllm-sr/d3-turbo) |
+| WeMM-JEV | WeMM-JEV | native | Python 3.12+; transformers 5.17; author requirements.txt | [source](https://huggingface.co/Rover00/WeMM-JEV) |
+| Xing-VL2.0-Decision | Xing-VL | native | Python 3.12+; transformers 5.17; author requirements.txt | [source](https://huggingface.co/RBDash-Team/Xing-VL2.0-Decision) |
 | Jev | Jev | http | Jev API access and JEV_ENDPOINT (full /v1/systemone URL) | [source](https://typesafe.ai) |
 | OpenAI-Decisions | OpenAI-Decisions | http | OPENAI_API_KEY | [source](https://developers.openai.com/api/docs/guides/decisions) |
 | LLM-OpenAI | LLM | http | OPENAI_API_KEY; `--option model=<model ID>` (default gpt-4o-mini) | [source](https://platform.openai.com/docs/guides/structured-outputs) |
@@ -107,6 +112,19 @@ The tested reference deployment uses the author's published `READOUT_T=0.85`,
 and FP8 serving configuration. These constants are not fitted on JevalKit's
 test sets; the service provenance records all selected settings.
 
+Valen-Decision-1.5 uses the Valen adapter. Its leaderboard runs used
+`--option attention=flash_attention_2`; Decision Index vision applies the same
+1,638,400-pixel Valen image budget.
+
+Amos-1-Large, vLLM-SR-d3-turbo, WeMM-JEV and Xing-VL2.0-Decision run the inference
+code shipped inside each checkpoint: `serve/amos`, `d3_engine.py`, `inference/` and
+`rbdash_decision.py`. A same-named module imported from elsewhere is rejected. All
+four take text and images; video is reported as unsupported. Amos follows the
+author's serving defaults (`max_len` 131,072, one rotation, strict inputs) and records
+an out-of-GPU-memory request as unsupported with its own message. d3 and WeMM-JEV
+accept 2 to 10 Score levels. Xing scores each question in a separate forward pass and
+accepts at most 4 images and 255 options.
+
 Intern-Decision accepts at most 16 questions in a shared request. Decision1-Kai
 requires nonempty state text. Requests outside these released SDK limits are
 recorded as unsupported with the original request preserved.
@@ -122,7 +140,8 @@ Use the [managed-service example](../examples/served-model.json) to record weigh
 | Runtime | Python | PyTorch / CUDA | Transformers |
 |---|---|---|---|
 | Valen | 3.10 | 2.6.0 / 12.4 | 5.4.0 |
-| Native author SDKs | 3.12 | 2.10.0 / 12.8 | 5.14.1 |
+| Native author SDKs, Valen-Decision-1.5 | 3.12 | 2.10.0 / 12.8 | 5.14.1 |
+| Amos / d3 / WeMM-JEV / Xing-VL checkpoint engines | 3.12 | 2.10.0 / 12.8 | 5.17.0 |
 | H2O-Lightning / OpenJev services | Separate vLLM 0.30.0 environment | 2.13.0 / 13.0 | 5.19.0 |
 
 Use separate environments where author dependencies differ. Matrix rows can

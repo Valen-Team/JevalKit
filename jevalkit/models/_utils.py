@@ -1,11 +1,13 @@
 """Shared model resolution, rubric rendering and author-module loading."""
 
 import copy
+import importlib
 import importlib.util
 import sys
 from pathlib import Path
 from ..io import dumps, object_hash
 from ..paths import data_root
+from ..schema import native_answer
 
 
 def resolve_model(model, revision="main", root=None):
@@ -66,3 +68,28 @@ def load_module(path):
     sys.path.insert(0, str(path.parent))
     spec.loader.exec_module(module)
     return module
+
+
+def import_author_module(folder, name):
+    """Import a module the checkpoint ships, refusing a same-named module from anywhere else."""
+    folder = Path(folder).resolve()
+    if str(folder) not in sys.path:
+        sys.path.insert(0, str(folder))
+    module = importlib.import_module(name)
+    origin = Path(module.__file__).resolve()
+    if folder not in origin.parents:
+        raise ImportError(f"{name} was imported from {origin}, not from the checkpoint at {folder}")
+    return module
+
+
+def engine_answers(questions, response):
+    """Engines that report Noul as P(true) and other types as candidate probabilities."""
+    answers = {}
+    for qid, question in questions.items():
+        answer = response["answers"][qid]
+        if question["type"] == "noul":
+            probabilities = {"false": 1 - answer["noul"], "true": answer["noul"]}
+        else:
+            probabilities = answer["probabilities"]
+        answers[qid] = native_answer(question, probabilities)
+    return answers

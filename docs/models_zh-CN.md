@@ -4,7 +4,7 @@
 
 [项目概览](../README_zh-CN.md) · [使用指南](quickstart_zh-CN.md) · [评分协议](benchmarks_zh-CN.md)
 
-当前注册了 20 个模型家族，另有 Uniform 和通用 LLM 基线；同一家族的尺寸变体不重复计数。
+当前注册了 24 个模型家族，另有 Uniform 和通用 LLM 基线；同一家族的尺寸变体不重复计数。
 原生适配器调用作者发布的实现，HTTP 适配器连接作者服务或托管 API。
 注册只表示接入了接口，实际权重评测情况需查看排行榜及对应 manifest。
 
@@ -16,6 +16,7 @@
 | Intern-Decision-2B | Intern-Decision | 原生接口 | Python 3.12+; 作者的 requirements.txt | [源码](https://github.com/InternLM/Intern-Decision) |
 | Valen-4B | Valen | 原生接口 | jevalkit[hf] | [源码](https://github.com/Valen-Team/Valen) |
 | Intern-Decision-4B | Intern-Decision | 原生接口 | Python 3.12+; 作者的 requirements.txt | [源码](https://github.com/InternLM/Intern-Decision) |
+| Valen-Decision-1.5-{0.8B,2B,4B,9B,27B} | Valen | 原生接口 | jevalkit[hf] | [源码](https://huggingface.co/Valen-Team) |
 | Laya | Laya | 原生接口 | laya | [源码](https://github.com/NandhaKishorM/laya) |
 | Liquid-d1-3B | Liquid-d1 | 原生接口 | transformers>=5.14; 作者依赖 | [源码](https://huggingface.co/LiquidAI/d1-3B) |
 | Decision1-Kai | vLLM-Decision1 | 原生接口 | jevalkit[hf] | [源码](https://huggingface.co/vllm-sr/Decision-1.0-Kai-0.6B) |
@@ -31,6 +32,10 @@
 | QEV | QEV | 原生接口 | 作者的 veyra 包； `--option source=<checkout>/src` | [源码](https://github.com/ken-jo/qev) |
 | OmniJev | OmniJev | 原生接口 | 作者的 mso 包； `--option source=<checkout>` `--option base_model=<Qwen3.5 weights>` | [源码](https://github.com/tinnel123666888/OmniJev) |
 | Visual-Jev | Visual-Jev | 原生接口 | 作者的 vdm 包； `--option source=<checkout>/code` `--option base_model=<Qwen3-VL weights>` | [源码](https://github.com/guanxuyu-sv/Visual-Jev) |
+| Amos-1-Large | Amos | 原生接口 | Python 3.12+; transformers 5.17; 作者的 serve/pyproject.toml | [源码](https://huggingface.co/mukaddamzaid/amos-1-large) |
+| vLLM-SR-d3-turbo | vLLM-SR-d3 | 原生接口 | Python 3.12+; transformers 5.17; 作者的 requirements.txt | [源码](https://huggingface.co/vllm-sr/d3-turbo) |
+| WeMM-JEV | WeMM-JEV | 原生接口 | Python 3.12+; transformers 5.17; 作者的 requirements.txt | [源码](https://huggingface.co/Rover00/WeMM-JEV) |
+| Xing-VL2.0-Decision | Xing-VL | 原生接口 | Python 3.12+; transformers 5.17; 作者的 requirements.txt | [源码](https://huggingface.co/RBDash-Team/Xing-VL2.0-Decision) |
 | Jev | Jev | HTTP | Jev API 访问权限及 JEV_ENDPOINT (完整 /v1/systemone 地址) | [源码](https://typesafe.ai) |
 | OpenAI-Decisions | OpenAI-Decisions | HTTP | OPENAI_API_KEY | [源码](https://developers.openai.com/api/docs/guides/decisions) |
 | LLM-OpenAI | LLM | HTTP | OPENAI_API_KEY；`--option model=<模型 ID>`（默认 gpt-4o-mini） | [源码](https://platform.openai.com/docs/guides/structured-outputs) |
@@ -94,6 +99,15 @@ OpenJev 应使用固定版本推荐的 `READOUT_TARGETED=1` 路径，读取每�
 `READOUT_NOUL_BIAS=0`、`READOUT_INSTR_STYLE=pyrepr` 和 FP8 服务配置。
 这些常量未在 JevalKit 测试集上拟合，服务记录保存全部选定设置。
 
+Valen-Decision-1.5 使用 Valen 适配器。排行榜上的运行使用了 `--option attention=flash_attention_2`；
+Decision Index 视觉部分同样采用 Valen 的 1,638,400 像素图像预算。
+
+Amos-1-Large、vLLM-SR-d3-turbo、WeMM-JEV 和 Xing-VL2.0-Decision 调用各自 checkpoint 内附带的推理代码：
+`serve/amos`、`d3_engine.py`、`inference/` 和 `rbdash_decision.py`；若同名模块来自其他位置，适配器会拒绝加载。
+四者都接受文本和图像，视频输入记为 unsupported。Amos 沿用作者的服务默认设置（`max_len` 131,072、一次旋转、严格输入），
+单卡显存不足的请求记为 unsupported 并附带单独的说明。d3 和 WeMM-JEV 支持 2 到 10 级 Score。
+Xing 对每个问题单独做一次前向计算，每个请求最多 4 张图像、每个问题最多 255 个选项。
+
 Intern-Decision 每个共享请求最多接受 16 个问题，Decision1-Kai 要求状态文本非空。
 超出发布版 SDK 限制的请求记为 unsupported，原始请求完整保留。
 
@@ -110,7 +124,8 @@ StartLux v1.1 Instant 使用作者的 `startlux-decide serve` 服务，通过 `S
 | 运行环境 | Python | PyTorch / CUDA | Transformers |
 |---|---|---|---|
 | Valen | 3.10 | 2.6.0 / 12.4 | 5.4.0 |
-| 作者原生 SDK | 3.12 | 2.10.0 / 12.8 | 5.14.1 |
+| 作者原生 SDK、Valen-Decision-1.5 | 3.12 | 2.10.0 / 12.8 | 5.14.1 |
+| Amos / d3 / WeMM-JEV / Xing-VL checkpoint 引擎 | 3.12 | 2.10.0 / 12.8 | 5.17.0 |
 | H2O-Lightning / OpenJev 服务 | 独立的 vLLM 0.30.0 环境 | 2.13.0 / 13.0 | 5.19.0 |
 
 作者依赖不兼容时应使用独立环境。矩阵行可指定绝对 `python` 路径，SDK 源码可通过 `--option source=PATH` 指定。

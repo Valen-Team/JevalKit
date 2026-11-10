@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <a href="#supported-models"><img src="https://img.shields.io/badge/Models-20_families-007F6B?style=flat&amp;labelColor=1E232C" alt="20 个模型家族"></a>
+  <a href="#supported-models"><img src="https://img.shields.io/badge/Models-24_families-007F6B?style=flat&amp;labelColor=1E232C" alt="24 个模型家族"></a>
   <a href="#supported-benchmarks"><img src="https://img.shields.io/badge/Benchmarks-8_suites-007F6B?style=flat&amp;labelColor=1E232C" alt="8 个 Jev 相关评测基准"></a>
   <a href="https://huggingface.co/spaces/Valen-Team/JevalKit-Leaderboard"><img src="https://img.shields.io/badge/Space-Leaderboard-007F6B?style=flat&amp;logo=huggingface&amp;logoColor=white&amp;labelColor=1E232C" alt="Hugging Face 排行榜"></a>
   <a href="https://huggingface.co/datasets/Valen-Team/JevalKit_Datasets"><img src="https://img.shields.io/badge/Datasets-10_TSV_views-007F6B?style=flat&amp;logo=huggingface&amp;logoColor=white&amp;labelColor=1E232C" alt="Hugging Face：10 个数据视图"></a>
@@ -42,6 +42,7 @@ JevalKit 是面向 Jev 类决策模型的开源评测工具，提供统一的模
 
 ## 项目动态
 
+- **2026-11-10：** Valen 家族新增 Valen-Decision-1.5（0.8B、2B、4B、9B、27B），并新增 Amos、vLLM-SR d3、WeMM-JEV 和 Xing-VL 四个模型家族。这 9 个模型均已在排行榜实测；排行榜的 Decision Index 现只展示 0.4.1。
 - **2026-10-19：** 发布 [🤗 JevalKit 排行榜](https://huggingface.co/spaces/Valen-Team/JevalKit-Leaderboard)，支持基准与模型大小筛选、模型比较、概率指标查看，以及 Markdown、TSV、JSON 结果导出；区分完整评测、冒烟测试和导入的预测结果。
 - **2026-10-18：** 接入 VisualDecisionBench、JevBench、Decision Index（公开部分）、Typed-Decisions、DecisionBench、Procedural Typed Decisions、zh-decision-bench 和 JevAlt-Bench，共 8 个基准。评测数据已整理至 [🤗 评测基准数据集汇总](https://huggingface.co/datasets/Valen-Team/JevalKit_Datasets)。
 - **2026-10-18：** 已接入 20 个 Jev 类模型家族，其中 18 个已完成真实推理验证；Jev 和 OpenAI Decisions 的托管 API 适配器已实现，实际评测尚待完成。
@@ -94,15 +95,15 @@ python -m jevalkit leaderboard "$JEVALKIT_DATA_ROOT/results" \
 
 ## 支持的模型
 
-同一家族的尺寸变体合并计数，Clef 和 Clef-Flash 也属于同一家族。
+同一家族的尺寸变体合并计数；Valen-Decision-1.5 属于 Valen 家族，Clef 和 Clef-Flash 也属于同一家族。
 “已实测”表示该家族至少有一个注册变体完成了真实推理验证；各基准的覆盖情况见[排行榜](https://huggingface.co/spaces/Valen-Team/JevalKit-Leaderboard)。
 
 <details>
-<summary>查看支持的模型（20 个家族）</summary>
+<summary>查看支持的模型（24 个家族）</summary>
 
 | 模型家族 | 注册模型 ID | 接口 | 评测状态 |
 |---|---|---|---|
-| [Valen](https://github.com/Valen-Team/Valen) | `Valen-0.8B`, `Valen-2B`, `Valen-4B` | 原生接口 | 已实测 |
+| [Valen](https://github.com/Valen-Team/Valen) | `Valen-0.8B`, `Valen-2B`, `Valen-4B`, `Valen-Decision-1.5-{0.8B,2B,4B,9B,27B}` | 原生接口 | 已实测 |
 | [Valen API](https://valen-team.github.io/docs/valen/api/) | `Valen-API-0.8B`, `Valen-API-2B`, `Valen-API-4B` | 托管 API | 已在 `delivery_support` 实测 |
 | [Intern-Decision](https://github.com/InternLM/Intern-Decision) | `Intern-Decision-0.8B`, `Intern-Decision-2B`, `Intern-Decision-4B` | 原生接口 | 已实测 |
 | [Laya](https://github.com/NandhaKishorM/laya) | `Laya` | 原生接口 | 已实测 |
@@ -111,13 +112,17 @@ python -m jevalkit leaderboard "$JEVALKIT_DATA_ROOT/results" \
 | [Clef](https://huggingface.co/Cloudflare/clef) | `Clef`, `Clef-Flash` | 原生接口 | 已实测 |
 | [Pplx-Decider](https://huggingface.co/perplexity-ai/pplx-decider-v1.1-27b) | `Pplx-Decider` | 原生接口 | 已实测 |
 | [JevK5](https://huggingface.co/alibiserikbay/JevK5) | `JevK5` | 原生接口 | 已实测 |
-| [StartLux](https://github.com/StartLuxLabs/StartLux-Decision) | `StartLux-0.8B`, `StartLux-v1.1-{0.8B,2B,4B,9B,27B}-Instant` | 原生接口 / 作者服务 | v1 已实测；v1.1 待实测 |
+| [StartLux](https://github.com/StartLuxLabs/StartLux-Decision) | `StartLux-0.8B`, `StartLux-v1.1-{0.8B,2B,4B,9B,27B}-Instant` | 原生接口 / 作者服务 | 已实测 |
 | [Crivo](https://huggingface.co/tardellirs/crivo-150m) | `Crivo-150M` | 原生接口 | 已实测 |
 | [RSI-Jev](https://github.com/Shanghua-Gao/RSI-Jev) | `RSI-Jev-v4` | 原生接口 | 已实测 |
 | [Vjev](https://huggingface.co/yah01/vjev-vision) | `Vjev-4B` | 原生接口 | 已实测 |
 | [QEV](https://github.com/ken-jo/qev) | `QEV` | 原生接口 | 已实测 |
 | [OmniJev](https://github.com/tinnel123666888/OmniJev) | `OmniJev` | 原生接口 | 已实测 |
 | [Visual-Jev](https://github.com/guanxuyu-sv/Visual-Jev) | `Visual-Jev` | 原生接口 | 已实测 |
+| [Amos](https://huggingface.co/mukaddamzaid/amos-1-large) | `Amos-1-Large` | 原生接口 | 已实测 |
+| [vLLM-SR d3](https://huggingface.co/vllm-sr/d3-turbo) | `vLLM-SR-d3-turbo` | 原生接口 | 已实测 |
+| [WeMM-JEV](https://huggingface.co/Rover00/WeMM-JEV) | `WeMM-JEV` | 原生接口 | 已实测 |
+| [Xing-VL](https://huggingface.co/RBDash-Team/Xing-VL2.0-Decision) | `Xing-VL2.0-Decision` | 原生接口 | 已实测 |
 | [Kev](https://github.com/jaredpalmer/kev) | `Kev` | 作者服务 | 已实测 |
 | [H2O-Lightning](https://huggingface.co/h2oai/h2o-lightning-4b) | `H2O-Lightning` | 作者服务 | 已实测 |
 | [OpenJev](https://huggingface.co/openjev/openjev) | `OpenJev` | 作者服务 | 已实测 |
