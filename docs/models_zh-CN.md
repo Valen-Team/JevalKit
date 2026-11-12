@@ -44,6 +44,7 @@
 | Kev | Kev | HTTP | 作者的 kev.serve 服务； KEV_ENDPOINT (完整 /v1/systemone 地址) | [源码](https://github.com/jaredpalmer/kev) |
 | H2O-Lightning | H2O-Lightning | HTTP | 作者的 serve.sh 服务； H2O_ENDPOINT (完整 /v1/systemone 地址) | [源码](https://huggingface.co/h2oai/h2o-lightning-4b) |
 | OpenJev | OpenJev | HTTP | 作者的 helper/shim.py 服务； OPENJEV_ENDPOINT (完整 /v1/systemone 地址) | [源码](https://huggingface.co/openjev/openjev) |
+| KnowLine-{0.8B-Gen1,2B-Gen1,4B-Gen5.5,9B-Gen1,26B-A4B-Gen2.5,31B-Gen1.5,35B-A3B-Gen1.5} | KnowLine | HTTP | 模型仓库自带的 serve_knowline.sh 服务； KNOWLINE_ENDPOINT (完整 /v1/systemone 地址) | [源码](https://huggingface.co/PelaAI) |
 
 已有权重可通过 `--option model=/path/to/checkpoint` 指定，外部作者包可通过
 `--option source=/path/to/checkout` 指定。OmniJev 和 Visual Jev 还需要 `--option base_model=/path/to/base`。

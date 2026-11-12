@@ -121,7 +121,7 @@ def test_transport_retries_remote_disconnect_with_a_fixed_limit(decision_server,
 
 
 @pytest.mark.parametrize("model_name", ["Jev", "Kev", "H2O-Lightning", "OpenJev",
-                                       "StartLux-v1.1-4B-Instant"])
+                                       "StartLux-v1.1-4B-Instant", "KnowLine-4B-Gen5.5"])
 def test_registered_systemone_api_uses_named_questions(decision_server, model_name):
     endpoint, calls = decision_server
     model = build_model(model_name, endpoint=endpoint + "/v1/systemone")
@@ -406,3 +406,17 @@ def test_registered_openai_decisions_transport_all_question_types(decision_serve
     }
     assert result["usage"] == {"input_tokens": 12}
     assert source == before and "fixture-openai-token" not in json.dumps(model.metadata())
+
+
+def test_knowline_sends_structured_state_unchanged_and_rejects_images(decision_server):
+    endpoint, calls = decision_server
+    model = build_model("KnowLine-9B-Gen1", endpoint=endpoint + "/v1/systemone")
+    source = request()
+    source["state"] = {"ticket": {"id": 7, "text": "refund please"}}
+    assert model.predict(source)["answers"]["check"]["noul"] == 0.75
+    assert calls[-1][2]["state"] == {"ticket": {"id": 7, "text": "refund please"}}
+    image = request()
+    image["state"] = {"messages": [{"role": "user", "content": [
+        {"type": "text", "text": "look"}, {"type": "image_url", "image_url": {"url": "data:image/png;base64,AA=="}}]}]}
+    with pytest.raises(Unsupported):
+        model.predict(image)

@@ -143,6 +143,7 @@ variant; per-benchmark coverage is shown in the [leaderboard](https://huggingfac
 | [Kev](https://github.com/jaredpalmer/kev) | `Kev` | Author server | Measured |
 | [H2O-Lightning](https://huggingface.co/h2oai/h2o-lightning-4b) | `H2O-Lightning` | Author server | Measured |
 | [OpenJev](https://huggingface.co/openjev/openjev) | `OpenJev` | Author server | Measured |
+| [KnowLine](https://huggingface.co/PelaAI) | `KnowLine-0.8B-Gen1`, `KnowLine-2B-Gen1`, `KnowLine-4B-Gen5.5`, `KnowLine-9B-Gen1`, `KnowLine-26B-A4B-Gen2.5`, `KnowLine-31B-Gen1.5`, `KnowLine-35B-A3B-Gen1.5` | Author server | Pending |
 | [Jev](https://typesafe.ai) | `Jev` | Hosted API | Full evaluation available |
 | [OpenAI Decisions](https://developers.openai.com/api/docs/guides/decisions) | `OpenAI-Decisions` | Hosted API | Live evaluation pending |
 
