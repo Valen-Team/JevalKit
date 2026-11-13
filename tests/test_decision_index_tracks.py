@@ -100,6 +100,7 @@ def test_official_validation_and_coverage_gate_ranked_results(tmp_path, monkeypa
 
 @pytest.mark.parametrize("unsupported_first", [False, True])
 def test_official_vision_index_uses_all_benchmarks_chance_weights_and_unanswered_penalty(tmp_path, unsupported_first):
+    pytest.importorskip("decision_index")
     from decision_index.vision.spec import BENCHMARKS
 
     rows, records, predictions = [], [], []
