@@ -126,6 +126,7 @@ python -m jevalkit leaderboard "$JEVALKIT_DATA_ROOT/results" \
 | [Kev](https://github.com/jaredpalmer/kev) | `Kev` | 作者服务 | 已实测 |
 | [H2O-Lightning](https://huggingface.co/h2oai/h2o-lightning-4b) | `H2O-Lightning` | 作者服务 | 已实测 |
 | [OpenJev](https://huggingface.co/openjev/openjev) | `OpenJev` | 作者服务 | 已实测 |
+| [KnowLine](https://huggingface.co/PelaAI) | `KnowLine-0.8B-Gen1`, `KnowLine-2B-Gen1`, `KnowLine-4B-Gen5.5`, `KnowLine-9B-Gen1`, `KnowLine-26B-A4B-Gen2.5`, `KnowLine-31B-Gen1.5`, `KnowLine-35B-A3B-Gen1.5` | 作者服务 | 待实测 |
 | [Jev](https://typesafe.ai) | `Jev` | 托管 API | 已完成全量评测 |
 | [OpenAI Decisions](https://developers.openai.com/api/docs/guides/decisions) | `OpenAI-Decisions` | 托管 API | 待实际评测 |
 

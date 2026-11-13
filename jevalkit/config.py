@@ -252,6 +252,25 @@ register(
     transport="http",
     requirements="author helper/shim.py instance; OPENJEV_ENDPOINT (full /v1/systemone URL)",
 )
+for name in (
+    "KnowLine-0.8B-Gen1",
+    "KnowLine-2B-Gen1",
+    "KnowLine-4B-Gen5.5",
+    "KnowLine-9B-Gen1",
+    "KnowLine-26B-A4B-Gen2.5",
+    "KnowLine-31B-Gen1.5",
+    "KnowLine-35B-A3B-Gen1.5",
+):
+    register(
+        name,
+        "KnowLine",
+        "jevalkit.models.knowline:KnowLineModel",
+        "PelaAI/" + name,
+        "https://huggingface.co/PelaAI/" + name,
+        options={"endpoint_env": "KNOWLINE_ENDPOINT", "token_env": "KNOWLINE_API_KEY"},
+        transport="http",
+        requirements="the model repo's serve_knowline.sh instance; KNOWLINE_ENDPOINT (full /v1/systemone URL)",
+    )
 register(
     "Amos-1-Large",
     "Amos",

@@ -86,7 +86,7 @@ def test_new_models_are_registered_with_their_published_checkpoints():
         assert (spec.family, spec.model, spec.transport) == (family, checkpoint, "native")
         assert spec.source_url == "https://huggingface.co/" + checkpoint
     families = {s.family for s in MODELS.values() if s.family not in {"baseline", "LLM"}}
-    assert len(families) == 24
+    assert len(families) == 25
 
 
 def test_valen_decision_15_uses_the_board_image_budget():

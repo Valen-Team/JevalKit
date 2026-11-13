@@ -44,6 +44,7 @@ Registration is not evidence of a successful weight-level evaluation: consult th
 | Kev | Kev | http | author kev.serve instance; KEV_ENDPOINT (full /v1/systemone URL) | [source](https://github.com/jaredpalmer/kev) |
 | H2O-Lightning | H2O-Lightning | http | author serve.sh instance; H2O_ENDPOINT (full /v1/systemone URL) | [source](https://huggingface.co/h2oai/h2o-lightning-4b) |
 | OpenJev | OpenJev | http | author helper/shim.py instance; OPENJEV_ENDPOINT (full /v1/systemone URL) | [source](https://huggingface.co/openjev/openjev) |
+| KnowLine-{0.8B-Gen1,2B-Gen1,4B-Gen5.5,9B-Gen1,26B-A4B-Gen2.5,31B-Gen1.5,35B-A3B-Gen1.5} | KnowLine | http | the model repo's serve_knowline.sh instance; KNOWLINE_ENDPOINT (full /v1/systemone URL) | [source](https://huggingface.co/PelaAI) |
 
 Model overrides use `--option model=/path/to/checkpoint`; external author packages can use
 `--option source=/path/to/checkout`. OmniJev and Visual Jev additionally require `--option base_model=/path/to/base`.
