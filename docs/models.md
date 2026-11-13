@@ -4,7 +4,7 @@
 
 [Project overview](../README.md) · [Running evaluations](quickstart.md) · [Scoring protocols](benchmarks.md)
 
-Twenty-four families are registered, plus the Uniform and general LLM baselines; size variants do not increase that count.
+Twenty-five families are registered, plus the Uniform and general LLM baselines; size variants do not increase that count.
 Native adapters invoke the author release. HTTP adapters require the author server or hosted API.
 Registration is not evidence of a successful weight-level evaluation: consult the leaderboard and its manifests.
 

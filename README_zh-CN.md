@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <a href="#supported-models"><img src="https://img.shields.io/badge/Models-24_families-007F6B?style=flat&amp;labelColor=1E232C" alt="24 个模型家族"></a>
+  <a href="#supported-models"><img src="https://img.shields.io/badge/Models-25_families-007F6B?style=flat&amp;labelColor=1E232C" alt="25 个模型家族"></a>
   <a href="#supported-benchmarks"><img src="https://img.shields.io/badge/Benchmarks-8_suites-007F6B?style=flat&amp;labelColor=1E232C" alt="8 个 Jev 相关评测基准"></a>
   <a href="https://huggingface.co/spaces/Valen-Team/JevalKit-Leaderboard"><img src="https://img.shields.io/badge/Space-Leaderboard-007F6B?style=flat&amp;logo=huggingface&amp;logoColor=white&amp;labelColor=1E232C" alt="Hugging Face 排行榜"></a>
   <a href="https://huggingface.co/datasets/Valen-Team/JevalKit_Datasets"><img src="https://img.shields.io/badge/Datasets-10_TSV_views-007F6B?style=flat&amp;logo=huggingface&amp;logoColor=white&amp;labelColor=1E232C" alt="Hugging Face：10 个数据视图"></a>
@@ -99,7 +99,7 @@ python -m jevalkit leaderboard "$JEVALKIT_DATA_ROOT/results" \
 “已实测”表示该家族至少有一个注册变体完成了真实推理验证；各基准的覆盖情况见[排行榜](https://huggingface.co/spaces/Valen-Team/JevalKit-Leaderboard)。
 
 <details>
-<summary>查看支持的模型（24 个家族）</summary>
+<summary>查看支持的模型（25 个家族）</summary>
 
 | 模型家族 | 注册模型 ID | 接口 | 评测状态 |
 |---|---|---|---|

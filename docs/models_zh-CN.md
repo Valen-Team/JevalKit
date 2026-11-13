@@ -4,7 +4,7 @@
 
 [项目概览](../README_zh-CN.md) · [使用指南](quickstart_zh-CN.md) · [评分协议](benchmarks_zh-CN.md)
 
-当前注册了 24 个模型家族，另有 Uniform 和通用 LLM 基线；同一家族的尺寸变体不重复计数。
+当前注册了 25 个模型家族，另有 Uniform 和通用 LLM 基线；同一家族的尺寸变体不重复计数。
 原生适配器调用作者发布的实现，HTTP 适配器连接作者服务或托管 API。
 注册只表示接入了接口，实际权重评测情况需查看排行榜及对应 manifest。
 

@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <a href="#supported-models"><img src="https://img.shields.io/badge/Models-24_families-007F6B?style=flat&amp;labelColor=1E232C" alt="24 model families"></a>
+  <a href="#supported-models"><img src="https://img.shields.io/badge/Models-25_families-007F6B?style=flat&amp;labelColor=1E232C" alt="25 model families"></a>
   <a href="#supported-benchmarks"><img src="https://img.shields.io/badge/Benchmarks-8_suites-007F6B?style=flat&amp;labelColor=1E232C" alt="8 Jev-related benchmark suites"></a>
   <a href="https://huggingface.co/spaces/Valen-Team/JevalKit-Leaderboard"><img src="https://img.shields.io/badge/Space-Leaderboard-007F6B?style=flat&amp;logo=huggingface&amp;logoColor=white&amp;labelColor=1E232C" alt="Hugging Face Space: leaderboard"></a>
   <a href="https://huggingface.co/datasets/Valen-Team/JevalKit_Datasets"><img src="https://img.shields.io/badge/Datasets-10_TSV_views-007F6B?style=flat&amp;logo=huggingface&amp;logoColor=white&amp;labelColor=1E232C" alt="Hugging Face: 10 dataset views"></a>
@@ -116,7 +116,7 @@ Size variants, Valen-Decision-1.5 and Clef/Clef-Flash count within their respect
 variant; per-benchmark coverage is shown in the [leaderboard](https://huggingface.co/spaces/Valen-Team/JevalKit-Leaderboard).
 
 <details>
-<summary>View supported models (24 families)</summary>
+<summary>View supported models (25 families)</summary>
 
 | Model family | Registered model IDs | Interface | Evaluation |
 |---|---|---|---|
