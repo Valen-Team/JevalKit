@@ -3,7 +3,7 @@
   "output": "/path/to/jevalkit-data/results/decision-benchmarks",
   "runs": [
     {
-      "model": "Valen-0.8B",
+      "model": "Valen-Decision-1.5-0.8B",
       "data": ["TypedDecisions", "DecisionBench", "ProceduralTypedDecisions", "ZhDecisionBench", "JevAltBench"]
     }
   ]

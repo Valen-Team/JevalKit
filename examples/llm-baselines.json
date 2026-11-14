@@ -3,7 +3,7 @@
   "output": "./results/llm-baselines",
   "data": ["VisualDecisionBench_Image", "JevBench"],
   "runs": [
-    {"model": "Valen-2B"},
+    {"model": "Valen-Decision-1.5-2B"},
     {"model": "LLM-OpenAI", "options": {"model": "gpt-4o-mini"}},
     {"model": "LLM-Anthropic", "options": {"model": "claude-haiku-4-5"}},
     {"model": "LLM-Gemini", "options": {"model": "gemini-3.5-flash-lite"}}

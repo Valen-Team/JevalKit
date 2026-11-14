@@ -67,11 +67,11 @@ tracks. Valen's native image budget is set automatically; see the [protocols](be
 ## Download a model and evaluate
 
 ```bash
-hf download Valen-Team/Valen-0.8B \
-  --local-dir "$JEVALKIT_DATA_ROOT/models/Valen-0.8B"
+hf download Valen-Team/Valen-Decision-1.5-0.8B \
+  --local-dir "$JEVALKIT_DATA_ROOT/models/Valen-Decision-1.5-0.8B"
 
-python -m jevalkit run --model Valen-0.8B --data JevBench \
-  --option model="$JEVALKIT_DATA_ROOT/models/Valen-0.8B" \
+python -m jevalkit run --model Valen-Decision-1.5-0.8B --data JevBench \
+  --option model="$JEVALKIT_DATA_ROOT/models/Valen-Decision-1.5-0.8B" \
   --output "$JEVALKIT_DATA_ROOT/results"
 ```
 

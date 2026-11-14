@@ -3,6 +3,7 @@ import argparse
 import json
 from pathlib import Path
 
+from .config import MODELS
 from .datasets import DecisionDataset
 from .metrics import score_predictions
 from .io import object_hash, sha256
@@ -11,9 +12,13 @@ from .schema import candidates, target_probabilities, target_label
 from .reliability import digest, write_json, validate_cache
 
 
+# Native Valen checkpoints, both generations. / 两代原生 Valen 权重。
+NATIVE_VALEN = {name for name, spec in MODELS.items() if spec.adapter == "jevalkit.models.valen:ValenModel"}
+
+
 def runtime_identity(runtime, protocol):
     name = Path(runtime["model"]).name
-    model = "Valen-Team/" + name if name in ("Valen-0.8B", "Valen-2B", "Valen-4B") else runtime["model"]
+    model = "Valen-Team/" + name if name in NATIVE_VALEN else runtime["model"]
     artifacts = runtime.get("artifacts_sha256") or {
         **runtime.get("weights", {}), **runtime.get("runtime_sha256", {}),
         "config.json": runtime["config_sha256"]}
@@ -29,7 +34,7 @@ def export_run(run_dir, output, role, protocol, group_namespace, root=None, grou
         raise ValueError("Unknown grouping policy")
     run_dir = Path(run_dir)
     manifest = json.loads((run_dir / "manifest.json").read_text())
-    if manifest["signature"]["model"] not in ("Valen-0.8B", "Valen-2B", "Valen-4B"):
+    if manifest["signature"]["model"] not in NATIVE_VALEN:
         raise ValueError("This exporter currently binds native Valen runs only")
     runtime = manifest["runtime"]
     if runtime.get("temperature") != 1.0 or runtime.get("calibration_sha256"):

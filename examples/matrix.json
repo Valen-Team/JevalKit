@@ -3,7 +3,7 @@
   "output": "./results/example",
   "data": ["JevBench", "VisualDecisionBench_Image"],
   "runs": [
-    {"model": "Valen-0.8B", "options": {"model": "/path/to/Valen-0.8B"}},
+    {"model": "Valen-Decision-1.5-0.8B", "options": {"model": "/path/to/Valen-Decision-1.5-0.8B"}},
     {"model": "Intern-Decision-0.8B", "python": "/path/to/python3.12", "options": {"model": "/path/to/Intern-Decision-0.8B"}}
   ]
 }

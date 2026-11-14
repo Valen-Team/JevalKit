@@ -81,8 +81,8 @@ environment. See the [model integration guide](docs/models.md).
 ```bash
 export JEVALKIT_DATA_ROOT="$PWD/data"
 
-hf download Valen-Team/Valen-0.8B \
-  --local-dir "$JEVALKIT_DATA_ROOT/models/Valen-0.8B"
+hf download Valen-Team/Valen-Decision-1.5-0.8B \
+  --local-dir "$JEVALKIT_DATA_ROOT/models/Valen-Decision-1.5-0.8B"
 
 hf download Valen-Team/JevalKit_Datasets --repo-type dataset \
   --include "datasets/JevBench.tsv" --local-dir "$JEVALKIT_DATA_ROOT"
@@ -95,8 +95,8 @@ scoring inputs have separate downloads in the [usage guide](docs/quickstart.md#d
 ### 3. Run and compare
 
 ```bash
-python -m jevalkit run --model Valen-0.8B --data JevBench \
-  --option model="$JEVALKIT_DATA_ROOT/models/Valen-0.8B" \
+python -m jevalkit run --model Valen-Decision-1.5-0.8B --data JevBench \
+  --option model="$JEVALKIT_DATA_ROOT/models/Valen-Decision-1.5-0.8B" \
   --output "$JEVALKIT_DATA_ROOT/results"
 
 python -m jevalkit leaderboard "$JEVALKIT_DATA_ROOT/results" \

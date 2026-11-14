@@ -67,8 +67,8 @@ Python 3.12 或独立的服务环境，见[模型接入说明](docs/models_zh-CN
 ```bash
 export JEVALKIT_DATA_ROOT="$PWD/data"
 
-hf download Valen-Team/Valen-0.8B \
-  --local-dir "$JEVALKIT_DATA_ROOT/models/Valen-0.8B"
+hf download Valen-Team/Valen-Decision-1.5-0.8B \
+  --local-dir "$JEVALKIT_DATA_ROOT/models/Valen-Decision-1.5-0.8B"
 
 hf download Valen-Team/JevalKit_Datasets --repo-type dataset \
   --include "datasets/JevBench.tsv" --local-dir "$JEVALKIT_DATA_ROOT"
@@ -80,8 +80,8 @@ VisualDecisionBench 的媒体文件和 Decision Index 的评分输入需另行�
 ### 3. 运行评测并比较结果
 
 ```bash
-python -m jevalkit run --model Valen-0.8B --data JevBench \
-  --option model="$JEVALKIT_DATA_ROOT/models/Valen-0.8B" \
+python -m jevalkit run --model Valen-Decision-1.5-0.8B --data JevBench \
+  --option model="$JEVALKIT_DATA_ROOT/models/Valen-Decision-1.5-0.8B" \
   --output "$JEVALKIT_DATA_ROOT/results"
 
 python -m jevalkit leaderboard "$JEVALKIT_DATA_ROOT/results" \

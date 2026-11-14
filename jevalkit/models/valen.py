@@ -15,7 +15,7 @@ class ValenModel(DecisionModel):
 
     def __init__(
         self,
-        model="Valen-Team/Valen-0.8B",
+        model="Valen-Team/Valen-Decision-1.5-0.8B",
         device="cuda",
         revision="main",
         attention="sdpa",

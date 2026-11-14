@@ -8,7 +8,7 @@ Benchmarks score single questions. A workflow scores what an application does wi
 pip install -e ".[workflow]"
 jeval workflow list
 jeval workflow run delivery_support --model Valen-API-4B --workers 4 --output runs/delivery_support/valen-4b
-jeval workflow run invoice_processing --model Valen-4B --output runs/invoice_processing/valen-4b
+jeval workflow run invoice_processing --model Valen-Decision-1.5-4B --output runs/invoice_processing/valen-4b
 jeval workflow compare invoice_processing runs/invoice_processing/*
 ```
 

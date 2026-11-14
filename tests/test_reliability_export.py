@@ -42,6 +42,16 @@ def test_export_preserves_failed_question_and_explicit_source_groups(tmp_path):
     assert cache["identity"]["backend"].endswith(":cpu")
 
 
+def test_export_names_a_local_valen_decision_1_5_run_by_its_hub_checkpoint(tmp_path):
+    dataset, manifest, _ = fixture(tmp_path)
+    manifest["signature"]["model"] = "Valen-Decision-1.5-0.8B"
+    manifest["runtime"]["model"] = "/data/models/Valen-Decision-1.5-0.8B"
+    (tmp_path / "manifest.json").write_text(json.dumps(manifest))
+    with patch("jevalkit.reliability_export.DecisionDataset", return_value=dataset):
+        cache = export_run(tmp_path, tmp_path / "cache.json", "test", {"recipe": "v1"}, "customers")
+    assert cache["identity"]["model"] == "Valen-Team/Valen-Decision-1.5-0.8B"
+
+
 def test_export_rejects_altered_selected_ids_before_writing(tmp_path):
     dataset, manifest, _ = fixture(tmp_path)
     manifest["signature"]["selected_ids_sha256"] = "changed"

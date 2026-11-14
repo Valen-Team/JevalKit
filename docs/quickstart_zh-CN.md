@@ -66,11 +66,11 @@ Mind2Web 还需要 Arial Bold 字体。评测两个公开轨道时使用
 ## 下载模型并评测
 
 ```bash
-hf download Valen-Team/Valen-0.8B \
-  --local-dir "$JEVALKIT_DATA_ROOT/models/Valen-0.8B"
+hf download Valen-Team/Valen-Decision-1.5-0.8B \
+  --local-dir "$JEVALKIT_DATA_ROOT/models/Valen-Decision-1.5-0.8B"
 
-python -m jevalkit run --model Valen-0.8B --data JevBench \
-  --option model="$JEVALKIT_DATA_ROOT/models/Valen-0.8B" \
+python -m jevalkit run --model Valen-Decision-1.5-0.8B --data JevBench \
+  --option model="$JEVALKIT_DATA_ROOT/models/Valen-Decision-1.5-0.8B" \
   --output "$JEVALKIT_DATA_ROOT/results"
 ```
 

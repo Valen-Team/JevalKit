@@ -9,7 +9,7 @@ The offline tools below need only Python's standard library. They never fetch we
 First split by customer, conversation, media identity or other source entity, independently of training. If reusing an already evaluated public benchmark, disclose the study as retrospective and freeze the partition seed before examining results.
 
 ```bash
-jeval reliability-export output/Valen-0.8B/Banking77 \
+jeval reliability-export output/Valen-Decision-1.5-0.8B/Banking77 \
   --root /data/JevalKit --role unassigned \
   --protocol recipe.json --group-namespace banking77-utterances-v1 \
   --group-by normalized-state --output raw.json
@@ -53,7 +53,7 @@ ECE uses 15 equal-width bins of **maximum candidate probability**, not Valen/Jev
 ## Load fitted parameters in the native Valen adapter
 
 ```bash
-jeval run --model Valen-0.8B --data Banking77 --output calibrated-run \
+jeval run --model Valen-Decision-1.5-0.8B --data Banking77 --output calibrated-run \
   --option revision=PINNED_REVISION \
   --option calibration=evidence/calibration.json \
   --option calibration_protocol=recipe.json

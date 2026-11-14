@@ -31,7 +31,7 @@ for size in ("0.8B", "2B", "4B"):
         "Valen",
         "jevalkit.models.valen:ValenModel",
         "Valen-Team/Valen-" + size,
-        "https://github.com/Liuziyu77/Valen",
+        "https://github.com/Valen-Team/Valen",
     )
     register(
         "Intern-Decision-" + size,
